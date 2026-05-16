@@ -1,3 +1,64 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+
+/* Extend Tailwind theme with design tokens (Tailwind v4 — no tailwind.config.ts) */
+@theme inline {
+  --color-bg-base: var(--bg-base);
+  --color-bg-card: var(--bg-card);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-light: var(--accent-light);
+  --color-accent-dim: var(--accent-dim);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-hint: var(--text-hint);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-warning: var(--warning);
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
+
+:root {
+  --bg-base: #F5F4FA;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #ECEAF8;
+  --border: #DDDAF0;
+  --text-primary: #1A1825;
+  --text-secondary: #534AB7;
+  --text-hint: #8884AA;
+  --accent: #7C6FCD;
+  --accent-deep: #534AB7;
+  --accent-light: #A89EE0;
+  --accent-dim: #EDE9FC;
+  --success: #4ADE80;
+  --error: #F87171;
+  --warning: #FBBF24;
+}
+
+.dark {
+  --bg-base: #0D0D10;
+  --bg-card: #141318;
+  --bg-elevated: #1E1C2A;
+  --border: #232130;
+  --text-primary: #F0EEFF;
+  --text-secondary: #9D96C8;
+  --text-hint: #6B6880;
+  --accent-dim: #1A1825;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
