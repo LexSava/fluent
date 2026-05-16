@@ -17,6 +17,7 @@ All commits must be in English and use the following prefixes:
 ## Workflow
 
 When I type "commit":
+
 1. Run `git diff` and `git status` to analyze all changes
 2. Propose a commit message with the appropriate prefix
 3. Show the proposed message and ask for approval:

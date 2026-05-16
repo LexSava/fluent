@@ -1,6 +1,6 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
 /* Extend Tailwind theme with design tokens (Tailwind v4 — no tailwind.config.ts) */
 @theme inline {
@@ -25,31 +25,31 @@
 }
 
 :root {
-  --bg-base: #F5F4FA;
-  --bg-card: #FFFFFF;
-  --bg-elevated: #ECEAF8;
-  --border: #DDDAF0;
-  --text-primary: #1A1825;
-  --text-secondary: #534AB7;
-  --text-hint: #8884AA;
-  --accent: #7C6FCD;
-  --accent-deep: #534AB7;
-  --accent-light: #A89EE0;
-  --accent-dim: #EDE9FC;
-  --success: #4ADE80;
-  --error: #F87171;
-  --warning: #FBBF24;
+  --bg-base: #f5f4fa;
+  --bg-card: #ffffff;
+  --bg-elevated: #eceaf8;
+  --border: #dddaf0;
+  --text-primary: #1a1825;
+  --text-secondary: #534ab7;
+  --text-hint: #8884aa;
+  --accent: #7c6fcd;
+  --accent-deep: #534ab7;
+  --accent-light: #a89ee0;
+  --accent-dim: #ede9fc;
+  --success: #4ade80;
+  --error: #f87171;
+  --warning: #fbbf24;
 }
 
 .dark {
-  --bg-base: #0D0D10;
+  --bg-base: #0d0d10;
   --bg-card: #141318;
-  --bg-elevated: #1E1C2A;
+  --bg-elevated: #1e1c2a;
   --border: #232130;
-  --text-primary: #F0EEFF;
-  --text-secondary: #9D96C8;
-  --text-hint: #6B6880;
-  --accent-dim: #1A1825;
+  --text-primary: #f0eeff;
+  --text-secondary: #9d96c8;
+  --text-hint: #6b6880;
+  --accent-dim: #1a1825;
 }
 
 * {
