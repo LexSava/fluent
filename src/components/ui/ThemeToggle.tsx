@@ -2,8 +2,9 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { Moon, Sun } from 'lucide-react'
-import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
+
+import { useTheme } from '@/components/layout/ThemeProvider'
 
 import { cn } from '@/lib/utils'
 
@@ -11,21 +12,19 @@ type ThemeToggleProps = {
   className?: string
 }
 
+const noop = () => () => {}
+
 export function ThemeToggle({ className }: ThemeToggleProps) {
-  const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const { resolved, setTheme } = useTheme()
+  const mounted = useSyncExternalStore(
+    noop,
+    () => true,
+    () => false
+  )
 
-  // Avoid hydration mismatch — setState via callback satisfies react-hooks/set-state-in-effect
-  useEffect(() => {
-    const onMount = () => setMounted(true)
-    onMount()
-  }, [])
+  if (!mounted) return <div className={cn('size-9', className)} />
 
-  if (!mounted) {
-    return <div className={cn('size-9', className)} />
-  }
-
-  const isDark = theme === 'dark'
+  const isDark = resolved === 'dark'
 
   return (
     <button
