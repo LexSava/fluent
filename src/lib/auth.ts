@@ -4,14 +4,12 @@ import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import Google from 'next-auth/providers/google'
 
+import { authConfig } from '@/lib/auth.config'
 import { prisma } from '@/lib/prisma'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   adapter: PrismaAdapter(prisma),
-  session: { strategy: 'jwt' },
-  pages: {
-    signIn: '/login',
-  },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -52,17 +50,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
         token.isOnboarded = (user as { isOnboarded?: boolean }).isOnboarded ?? false
       }
       return token
     },
-    async session({ session, token }) {
+    session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.id as string
-        ;(session.user as { isOnboarded?: boolean }).isOnboarded = token.isOnboarded as boolean
+        session.user.id = token.sub as string
+        ;(session.user as { isOnboarded?: boolean }).isOnboarded =
+          (token.isOnboarded as boolean) ?? false
       }
       return session
+    },
+    async signIn() {
+      return true
     },
   },
 })

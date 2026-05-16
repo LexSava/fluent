@@ -1,0 +1,186 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+
+import { LanguageSelector } from '@/components/onboarding/LanguageSelector'
+import { OnboardingStep } from '@/components/onboarding/OnboardingStep'
+import { Button } from '@/components/ui/Button'
+import { CefrLevel } from '@/types/user'
+import { cn } from '@/lib/utils'
+
+const TOTAL_STEPS = 3
+
+const CEFR_LEVELS: { value: CefrLevel; label: string; hint: string }[] = [
+  { value: CefrLevel.A1, label: 'A1', hint: 'Начинающий' },
+  { value: CefrLevel.A2, label: 'A2', hint: 'Элементарный' },
+  { value: CefrLevel.B1, label: 'B1', hint: 'Средний' },
+  { value: CefrLevel.B2, label: 'B2', hint: 'Выше среднего' },
+  { value: CefrLevel.C1, label: 'C1', hint: 'Продвинутый' },
+  { value: CefrLevel.C2, label: 'C2', hint: 'Свободное владение' },
+]
+
+const INTERESTS_LIST = [
+  'Путешествия',
+  'Технологии',
+  'Кино',
+  'Музыка',
+  'Спорт',
+  'Кулинария',
+  'Наука',
+  'Бизнес',
+  'Литература',
+  'Игры',
+]
+
+export default function OnboardingPage() {
+  const router = useRouter()
+  const [step, setStep] = useState(1)
+  const [targetLang, setTargetLang] = useState('')
+  const [cefrLevel, setCefrLevel] = useState<CefrLevel | ''>('')
+  const [interests, setInterests] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  function toggleInterest(item: string) {
+    setInterests((prev) => (prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]))
+  }
+
+  async function handleFinish() {
+    if (!targetLang || !cefrLevel) return
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await fetch('/api/user/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ targetLang, cefrLevel, interests }),
+      })
+      if (!res.ok) throw new Error('Ошибка сохранения')
+      router.push('/dashboard')
+    } catch {
+      setError('Не удалось сохранить настройки. Попробуйте снова.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[var(--bg-base)] px-4">
+      <div className="w-full max-w-xl rounded-lg border border-[var(--border)] bg-[var(--bg-card)] p-8">
+        {/* Step 1 — Language */}
+        {step === 1 && (
+          <OnboardingStep
+            step={1}
+            total={TOTAL_STEPS}
+            title="Какой язык учишь?"
+            description="Выбери язык, который хочешь освоить."
+          >
+            <LanguageSelector value={targetLang} onChange={setTargetLang} />
+            <Button
+              variant="primary"
+              size="md"
+              className="mt-2 w-full"
+              disabled={!targetLang}
+              onClick={() => setStep(2)}
+            >
+              Далее
+            </Button>
+          </OnboardingStep>
+        )}
+
+        {/* Step 2 — Level */}
+        {step === 2 && (
+          <OnboardingStep
+            step={2}
+            total={TOTAL_STEPS}
+            title="Твой уровень"
+            description="Оцени свой текущий уровень владения языком."
+          >
+            <div className="grid grid-cols-3 gap-2">
+              {CEFR_LEVELS.map(({ value, label, hint }) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setCefrLevel(value)}
+                  className={cn(
+                    'flex flex-col items-center rounded-md border px-3 py-4 transition-colors duration-150',
+                    cefrLevel === value
+                      ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-[var(--accent)]'
+                      : 'border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:border-[var(--accent)]'
+                  )}
+                >
+                  <span className="text-lg font-bold">{label}</span>
+                  <span className="mt-0.5 text-[11px]">{hint}</span>
+                </button>
+              ))}
+            </div>
+            <div className="mt-2 flex gap-3">
+              <Button variant="ghost" size="md" className="flex-1" onClick={() => setStep(1)}>
+                Назад
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
+                className="flex-1"
+                disabled={!cefrLevel}
+                onClick={() => setStep(3)}
+              >
+                Далее
+              </Button>
+            </div>
+          </OnboardingStep>
+        )}
+
+        {/* Step 3 — Interests */}
+        {step === 3 && (
+          <OnboardingStep
+            step={3}
+            total={TOTAL_STEPS}
+            title="Твои интересы"
+            description="Выбери темы — AI-тьютор будет использовать их в сессиях."
+          >
+            <div className="flex flex-wrap gap-2">
+              {INTERESTS_LIST.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => toggleInterest(item)}
+                  className={cn(
+                    'rounded-xs border px-3 py-1.5 text-sm font-medium transition-colors duration-150',
+                    interests.includes(item)
+                      ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-[var(--accent)]'
+                      : 'border-[var(--border)] bg-[var(--bg-card)] text-[var(--text-secondary)] hover:border-[var(--accent)]'
+                  )}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            {error && (
+              <p className="rounded-sm border border-[var(--error)] bg-[color-mix(in_srgb,var(--error)_10%,transparent)] px-3 py-2 text-xs text-[var(--error)]">
+                {error}
+              </p>
+            )}
+
+            <div className="mt-2 flex gap-3">
+              <Button variant="ghost" size="md" className="flex-1" onClick={() => setStep(2)}>
+                Назад
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
+                className="flex-1"
+                loading={loading}
+                onClick={handleFinish}
+              >
+                Начать обучение
+              </Button>
+            </div>
+          </OnboardingStep>
+        )}
+      </div>
+    </div>
+  )
+}
