@@ -50,16 +50,14 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
   const closePopover = useCallback(() => setShowPopover(false), [])
 
   const content = (
-    <div className="flex h-full w-56 flex-col border-r border-[var(--border)] bg-[var(--bg-card)]">
+    <div className="flex h-full w-56 flex-col border-r border-border bg-bg-card">
       {/* Logo */}
-      <div className="flex h-14 items-center justify-between border-b border-[var(--border)] px-4">
-        <span className="text-base font-semibold tracking-tight text-[var(--text-primary)]">
-          Fluent
-        </span>
+      <div className="flex h-14 items-center justify-between border-b border-border px-4">
+        <span className="text-base font-semibold tracking-tight text-text-primary">Fluent</span>
         <button
           onClick={onClose}
           aria-label="Закрыть меню"
-          className="flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-[var(--text-hint)] hover:text-[var(--text-primary)] md:hidden"
+          className="flex size-7 items-center justify-center rounded-sm text-text-hint hover:text-text-primary md:hidden"
         >
           <X size={16} aria-hidden="true" />
         </button>
@@ -71,10 +69,10 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
           const isSession = href === '/session'
           const active = pathname.startsWith(href)
           const itemClass = cn(
-            'flex items-center gap-3 rounded-[var(--radius-sm)] px-3 py-2 text-sm transition-colors duration-150',
+            'flex items-center gap-3 rounded-sm px-3 py-2 text-sm transition-colors duration-150',
             active
-              ? 'bg-[var(--accent-dim)] font-medium text-[var(--accent)]'
-              : 'text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]'
+              ? 'bg-accent-dim font-medium text-accent'
+              : 'text-text-secondary hover:bg-bg-elevated hover:text-text-primary'
           )
 
           if (isSession) {
@@ -96,7 +94,7 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
                   >
                     <Icon size={16} className="shrink-0" />
                     <span className="flex-1">{label}</span>
-                    <span className="size-2 shrink-0 rounded-full bg-[var(--success)]" />
+                    <span className="size-2 shrink-0 rounded-full bg-success" />
                   </a>
                 ) : (
                   <button
@@ -104,32 +102,30 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
                     aria-haspopup="true"
                     aria-expanded={showPopover}
                     className={cn(
-                      'flex w-full items-center gap-3 rounded-[var(--radius-sm)] px-3 py-2 text-sm transition-colors duration-150',
+                      'flex w-full items-center gap-3 rounded-sm px-3 py-2 text-sm transition-colors duration-150',
                       active
-                        ? 'bg-[var(--accent-dim)] font-medium text-[var(--accent)]'
-                        : 'cursor-default text-[var(--text-secondary)]'
+                        ? 'bg-accent-dim font-medium text-accent'
+                        : 'cursor-default text-text-secondary'
                     )}
                   >
                     <Icon size={16} className={cn('shrink-0', !active && 'opacity-50')} />
                     <span className={cn('flex-1 text-left', !active && 'opacity-50')}>{label}</span>
                     {showBadge ? (
-                      <span className="rounded-[3px] bg-[var(--accent)] px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-[0.08em] text-white">
+                      <span className="rounded-xs bg-accent px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-[0.08em] text-white">
                         Начни здесь
                       </span>
                     ) : (
                       <Lock
                         size={12}
-                        className={cn('shrink-0 text-[var(--text-hint)]', !active && 'opacity-50')}
+                        className={cn('shrink-0 text-text-hint', !active && 'opacity-50')}
                       />
                     )}
                   </button>
                 )}
 
                 <Popover isOpen={showPopover} onClose={closePopover}>
-                  <p className="text-sm font-semibold text-[var(--text-primary)]">
-                    Нет активной сессии
-                  </p>
-                  <p className="mt-1.5 text-xs leading-relaxed text-[var(--text-secondary)]">
+                  <p className="text-sm font-semibold text-text-primary">Нет активной сессии</p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-text-secondary">
                     Выбери формат занятия на главной странице чтобы начать
                   </p>
                   <button
@@ -138,7 +134,7 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
                       onClose()
                       router.push('/dashboard')
                     }}
-                    className="mt-3 w-full rounded-[var(--radius-sm)] bg-[var(--accent)] px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                    className="mt-3 w-full rounded-sm bg-accent px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
                   >
                     Перейти на главную
                   </button>
@@ -157,19 +153,17 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
       </nav>
 
       {/* User + sign out */}
-      <div className="border-t border-[var(--border)] p-3">
-        <div className="flex items-center gap-2 rounded-[var(--radius-sm)] p-1">
+      <div className="border-t border-border p-3">
+        <div className="flex items-center gap-2 rounded-sm p-1">
           <Avatar name={user.name ?? user.email} image={user.image} size="sm" />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-xs font-medium text-[var(--text-primary)]">
-              {user.name ?? 'User'}
-            </p>
-            <p className="truncate text-[10px] text-[var(--text-hint)]">{user.email}</p>
+            <p className="truncate text-xs font-medium text-text-primary">{user.name ?? 'User'}</p>
+            <p className="truncate text-[10px] text-text-hint">{user.email}</p>
           </div>
           <button
             onClick={() => signOut({ callbackUrl: '/login' })}
             aria-label="Выйти из аккаунта"
-            className="flex size-7 shrink-0 items-center justify-center rounded-[var(--radius-sm)] text-[var(--text-hint)] transition-colors hover:bg-[var(--bg-elevated)] hover:text-[var(--error)]"
+            className="flex size-7 shrink-0 items-center justify-center rounded-sm text-text-hint transition-colors hover:bg-bg-elevated hover:text-error"
           >
             <LogOut size={14} aria-hidden="true" />
           </button>

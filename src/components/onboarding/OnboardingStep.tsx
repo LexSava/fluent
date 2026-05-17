@@ -48,7 +48,7 @@ export function OnboardingStep({
             key={i}
             className={cn(
               'h-1 flex-1 rounded-full transition-colors duration-300',
-              i < step ? 'bg-[var(--accent)]' : 'bg-[var(--border)]'
+              i < step ? 'bg-accent' : 'bg-border'
             )}
           />
         ))}
@@ -56,13 +56,11 @@ export function OnboardingStep({
 
       {/* Header */}
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--text-hint)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-hint">
           Шаг {step} из {total}
         </p>
-        <h2 className="mt-1 text-[26px] font-bold tracking-[-0.03em] text-[var(--text-primary)]">
-          {title}
-        </h2>
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">{description}</p>
+        <h2 className="mt-1 text-[26px] font-bold tracking-[-0.03em] text-text-primary">{title}</h2>
+        <p className="mt-1 text-sm text-text-secondary">{description}</p>
       </div>
 
       {children}

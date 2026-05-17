@@ -92,9 +92,9 @@ export function RegisterForm() {
       </Button>
 
       <div className="flex items-center gap-3">
-        <div className="h-px flex-1 bg-[var(--border)]" />
-        <span className="text-xs text-[var(--text-hint)]">или</span>
-        <div className="h-px flex-1 bg-[var(--border)]" />
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-xs text-text-hint">или</span>
+        <div className="h-px flex-1 bg-border" />
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -135,7 +135,7 @@ export function RegisterForm() {
               type="button"
               onClick={() => setShowPassword((v) => !v)}
               aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
-              className="absolute right-3 top-[30px] text-[var(--text-hint)] hover:text-[var(--text-secondary)]"
+              className="absolute right-3 top-7.5 text-text-hint hover:text-text-secondary"
             >
               {showPassword ? (
                 <EyeOff size={16} aria-hidden="true" />
@@ -164,7 +164,7 @@ export function RegisterForm() {
             aria-label={
               showConfirm ? 'Скрыть подтверждение пароля' : 'Показать подтверждение пароля'
             }
-            className="absolute right-3 top-[30px] text-[var(--text-hint)] hover:text-[var(--text-secondary)]"
+            className="absolute right-3 top-7.5 text-text-hint hover:text-text-secondary"
           >
             {showConfirm ? (
               <EyeOff size={16} aria-hidden="true" />
@@ -194,9 +194,9 @@ export function RegisterForm() {
         </Button>
       </form>
 
-      <p className="text-center text-xs text-[var(--text-hint)]">
+      <p className="text-center text-xs text-text-hint">
         Уже есть аккаунт?{' '}
-        <Link href="/login" className="text-[var(--accent)] hover:underline">
+        <Link href="/login" className="text-accent hover:underline">
           Войти
         </Link>
       </p>

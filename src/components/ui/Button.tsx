@@ -6,11 +6,9 @@ type Variant = 'primary' | 'secondary' | 'ghost'
 type Size = 'sm' | 'md' | 'lg'
 
 const variantStyles: Record<Variant, string> = {
-  primary:
-    'bg-[var(--accent)] text-white border-transparent hover:bg-[var(--accent-deep)] font-semibold',
-  secondary:
-    'bg-[var(--bg-elevated)] text-[var(--text-secondary)] border-[var(--border)] hover:border-[var(--accent)]',
-  ghost: 'bg-transparent text-[var(--accent)] border-[var(--border)] hover:bg-[var(--bg-elevated)]',
+  primary: 'bg-accent text-white border-transparent hover:bg-accent-deep font-semibold',
+  secondary: 'bg-bg-elevated text-text-secondary border-border hover:border-accent',
+  ghost: 'bg-transparent text-accent border-border hover:bg-bg-elevated',
 }
 
 const sizeStyles: Record<Size, string> = {
@@ -37,9 +35,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-[var(--radius-sm)] border',
+        'inline-flex items-center justify-center gap-2 rounded-sm border',
         'transition-colors duration-150 outline-none',
-        'focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-1',
+        'focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1',
         'disabled:cursor-not-allowed disabled:opacity-50',
         variantStyles[variant],
         sizeStyles[size],

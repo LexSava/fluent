@@ -34,14 +34,12 @@ export function ForgotPasswordForm() {
     return (
       <div className="flex flex-col gap-4 text-center">
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-medium text-[var(--text-primary)]">
-            Письмо отправлено на <span className="text-[var(--accent)]">{submittedEmail}</span>
+          <p className="text-sm font-medium text-text-primary">
+            Письмо отправлено на <span className="text-accent">{submittedEmail}</span>
           </p>
-          <p className="text-xs text-[var(--text-hint)]">
-            Проверьте папку спам если письмо не пришло
-          </p>
+          <p className="text-xs text-text-hint">Проверьте папку спам если письмо не пришло</p>
         </div>
-        <Link href="/login" className="text-xs text-[var(--accent)] hover:underline">
+        <Link href="/login" className="text-xs text-accent hover:underline">
           ← Вернуться ко входу
         </Link>
       </div>
@@ -51,7 +49,7 @@ export function ForgotPasswordForm() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <p className="text-sm text-[var(--text-secondary)]">
+        <p className="text-sm text-text-secondary">
           Введите email, и мы отправим ссылку для сброса пароля.
         </p>
       </div>
@@ -73,8 +71,8 @@ export function ForgotPasswordForm() {
         </Button>
       </form>
 
-      <p className="text-center text-xs text-[var(--text-hint)]">
-        <Link href="/login" className="text-[var(--accent)] hover:underline">
+      <p className="text-center text-xs text-text-hint">
+        <Link href="/login" className="text-accent hover:underline">
           ← Вернуться к авторизации
         </Link>
       </p>

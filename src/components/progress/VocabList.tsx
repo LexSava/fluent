@@ -85,14 +85,14 @@ export default function VocabList({ items }: Props) {
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 rounded-md border border-[var(--border)] bg-[var(--bg-card)] py-16">
-        <BookOpen size={32} className="text-[var(--text-hint)]" />
-        <p className="text-[14px] font-medium text-[var(--text-secondary)]">
+      <div className="flex flex-col items-center justify-center gap-3 rounded-md border border-border bg-bg-card py-16">
+        <BookOpen size={32} className="text-text-hint" />
+        <p className="text-[14px] font-medium text-text-secondary">
           Словарь пока пуст. Начни сессию чтобы добавить слова.
         </p>
         <Link
           href="/dashboard"
-          className="mt-1 rounded-sm bg-[var(--accent)] px-4 py-2 text-[13px] font-semibold text-white"
+          className="mt-1 rounded-sm bg-accent px-4 py-2 text-[13px] font-semibold text-white"
         >
           Начать занятие
         </Link>
@@ -104,10 +104,7 @@ export default function VocabList({ items }: Props) {
     <div className="flex flex-col gap-3">
       {/* Search */}
       <div className="relative">
-        <Search
-          size={14}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-hint)]"
-        />
+        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-hint" />
         <input
           type="text"
           placeholder="Поиск по словам..."
@@ -116,7 +113,7 @@ export default function VocabList({ items }: Props) {
             setSearch(e.target.value)
             setShown(PAGE_SIZE)
           }}
-          className="w-full rounded-sm border border-[var(--border)] bg-[var(--bg-card)] py-2 pl-9 pr-3 text-[13px] text-[var(--text-primary)] placeholder:text-[var(--text-hint)] focus:border-[var(--accent)] focus:outline-none"
+          className="w-full rounded-sm border border-border bg-bg-card py-2 pl-9 pr-3 text-[13px] text-text-primary placeholder:text-text-hint focus:border-accent focus:outline-none"
         />
       </div>
 
@@ -143,16 +140,16 @@ export default function VocabList({ items }: Props) {
             </button>
           )
         })}
-        <span className="ml-auto self-center text-[11px] text-[var(--text-hint)]">
+        <span className="ml-auto self-center text-[11px] text-text-hint">
           {filtered.length} слов
         </span>
       </div>
 
       {/* Empty filtered state */}
       {filtered.length === 0 && (
-        <div className="flex flex-col items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--bg-card)] py-10">
-          <Search size={24} className="text-[var(--text-hint)]" />
-          <p className="text-[13px] text-[var(--text-hint)]">Ничего не найдено</p>
+        <div className="flex flex-col items-center gap-2 rounded-md border border-border bg-bg-card py-10">
+          <Search size={24} className="text-text-hint" />
+          <p className="text-[13px] text-text-hint">Ничего не найдено</p>
         </div>
       )}
 
@@ -166,29 +163,25 @@ export default function VocabList({ items }: Props) {
           return (
             <div
               key={item.id}
-              className="flex items-center gap-3 rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-3"
+              className="flex items-center gap-3 rounded-md border border-border bg-bg-card p-3"
             >
               {/* Left: term + translation */}
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[16px] font-semibold leading-tight text-[var(--text-primary)]">
+                <p className="truncate text-[16px] font-semibold leading-tight text-text-primary">
                   {item.term}
                 </p>
-                <p className="truncate text-[14px] text-[var(--text-secondary)]">
-                  {item.translation}
-                </p>
+                <p className="truncate text-[14px] text-text-secondary">{item.translation}</p>
               </div>
 
               {/* Center: progress bar */}
               <div className="flex w-[80px] shrink-0 flex-col gap-1">
-                <div className="h-[4px] overflow-hidden rounded-full bg-[var(--bg-elevated)]">
+                <div className="h-[4px] overflow-hidden rounded-full bg-bg-elevated">
                   <div
-                    className="h-full rounded-full bg-[var(--accent)] transition-all duration-500"
+                    className="h-full rounded-full bg-accent transition-all duration-500"
                     style={{ width: `${progress * 100}%` }}
                   />
                 </div>
-                <p className="text-[10px] text-[var(--text-hint)]">
-                  Повторений: {item.repetitions}
-                </p>
+                <p className="text-[10px] text-text-hint">Повторений: {item.repetitions}</p>
               </div>
 
               {/* Right: badge + due */}
@@ -216,7 +209,7 @@ export default function VocabList({ items }: Props) {
       {hasMore && (
         <button
           onClick={() => setShown((prev) => prev + PAGE_SIZE)}
-          className="cursor-pointer rounded-sm border border-[var(--border)] bg-[var(--bg-elevated)] py-2 text-[13px] font-semibold text-[var(--text-secondary)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          className="cursor-pointer rounded-sm border border-border bg-bg-elevated py-2 text-[13px] font-semibold text-text-secondary transition-colors hover:border-accent hover:text-accent"
         >
           Показать ещё ({filtered.length - shown} слов)
         </button>

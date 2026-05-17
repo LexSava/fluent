@@ -86,15 +86,15 @@ export default function OnboardingPage() {
 
   if (status === 'loading') {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--bg-base)]">
-        <span className="size-6 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent" />
+      <div className="flex min-h-screen items-center justify-center bg-bg-base">
+        <span className="size-6 animate-spin rounded-full border-2 border-accent border-t-transparent" />
       </div>
     )
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[var(--bg-base)] px-4">
-      <div className="w-full max-w-xl overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--bg-card)] p-8">
+    <div className="flex min-h-screen items-center justify-center bg-bg-base px-4">
+      <div className="w-full max-w-xl overflow-hidden rounded-lg border border-border bg-bg-card p-8">
         <AnimatePresence mode="wait" custom={direction}>
           {step === 1 && (
             <OnboardingStep
@@ -137,8 +137,8 @@ export default function OnboardingPage() {
                     className={cn(
                       'flex flex-col items-center rounded-md border px-3 py-4 transition-colors duration-150',
                       cefrLevel === value
-                        ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-[var(--accent)]'
-                        : 'border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:border-[var(--accent)]'
+                        ? 'border-accent bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-accent'
+                        : 'border-border bg-bg-elevated text-text-secondary hover:border-accent'
                     )}
                   >
                     <span className="text-lg font-bold">{label}</span>
@@ -182,8 +182,8 @@ export default function OnboardingPage() {
                     className={cn(
                       'rounded-xs border px-3 py-1.5 text-sm font-medium transition-colors duration-150',
                       interests.includes(item)
-                        ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-[var(--accent)]'
-                        : 'border-[var(--border)] bg-[var(--bg-card)] text-[var(--text-secondary)] hover:border-[var(--accent)]'
+                        ? 'border-accent bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-accent'
+                        : 'border-border bg-bg-card text-text-secondary hover:border-accent'
                     )}
                   >
                     {item}
@@ -192,7 +192,7 @@ export default function OnboardingPage() {
               </div>
 
               {error && (
-                <p className="rounded-sm border border-[var(--error)] bg-[color-mix(in_srgb,var(--error)_10%,transparent)] px-3 py-2 text-xs text-[var(--error)]">
+                <p className="rounded-sm border border-error bg-[color-mix(in_srgb,var(--error)_10%,transparent)] px-3 py-2 text-xs text-error">
                   {error}
                 </p>
               )}

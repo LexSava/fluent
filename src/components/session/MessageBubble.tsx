@@ -108,8 +108,8 @@ export const MessageBubble = memo(function MessageBubble({
           className={cn(
             'px-4 py-2.5 leading-relaxed',
             isUser
-              ? 'rounded-[8px_2px_8px_8px] bg-[var(--accent)] text-white text-[14px]'
-              : 'rounded-[2px_8px_8px_8px] border border-[var(--border)] bg-[var(--bg-card)] text-[var(--text-primary)] text-[15px]'
+              ? 'rounded-[8px_2px_8px_8px] bg-accent text-white text-[14px]'
+              : 'rounded-[2px_8px_8px_8px] border border-border bg-bg-card text-text-primary text-[15px]'
           )}
         >
           {isUser ? (
@@ -136,23 +136,21 @@ export const MessageBubble = memo(function MessageBubble({
           <div className="flex flex-col gap-1">
             <span
               className={cn(
-                'self-start rounded-[3px] border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em]',
+                'self-start rounded-xs border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em]',
                 score.correct
-                  ? 'border-[var(--success)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] text-[var(--success)]'
-                  : 'border-[var(--error)] bg-[color-mix(in_srgb,var(--error)_12%,transparent)] text-[var(--error)]'
+                  ? 'border-success bg-[color-mix(in_srgb,var(--success)_12%,transparent)] text-success'
+                  : 'border-error bg-[color-mix(in_srgb,var(--error)_12%,transparent)] text-error'
               )}
             >
               {score.score} / 10
             </span>
-            {score.feedback && (
-              <p className="text-xs text-[var(--text-secondary)]">{score.feedback}</p>
-            )}
+            {score.feedback && <p className="text-xs text-text-secondary">{score.feedback}</p>}
           </div>
         )}
 
         {/* Timestamp */}
         {showTimestamp && timestamp && (
-          <span className="text-[11px] text-[var(--text-hint)]">{timestamp}</span>
+          <span className="text-[11px] text-text-hint">{timestamp}</span>
         )}
       </div>
     </motion.div>

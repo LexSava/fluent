@@ -10,7 +10,7 @@ export function AppShell({ user, children }: { user: UserProfile; children: Reac
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[var(--bg-base)]">
+    <div className="flex h-screen overflow-hidden bg-bg-base">
       <Sidebar user={user} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex min-w-0 flex-1 flex-col">
         <Header user={user} onMenuOpen={() => setSidebarOpen(true)} />

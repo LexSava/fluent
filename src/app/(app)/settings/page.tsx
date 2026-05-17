@@ -11,14 +11,12 @@ export default async function SettingsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-[26px] font-bold tracking-[-0.03em] text-[var(--text-primary)]">
-        Настройки
-      </h1>
+      <h1 className="text-[26px] font-bold tracking-[-0.03em] text-text-primary">Настройки</h1>
 
       <div className="flex max-w-lg flex-col gap-4">
         {/* Profile */}
-        <section className="rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-5">
-          <h2 className="mb-4 text-[18px] font-semibold text-[var(--text-primary)]">Профиль</h2>
+        <section className="rounded-md border border-border bg-bg-card p-5">
+          <h2 className="mb-4 text-[18px] font-semibold text-text-primary">Профиль</h2>
           <dl className="flex flex-col gap-3">
             <Row label="Имя" value={user?.name ?? '—'} />
             <Row label="Email" value={user?.email ?? '—'} />
@@ -32,7 +30,7 @@ export default async function SettingsPage() {
           </dl>
         </section>
 
-        <p className="text-xs text-[var(--text-hint)]">
+        <p className="text-xs text-text-hint">
           Редактирование настроек будет доступно в следующих версиях.
         </p>
       </div>
@@ -42,11 +40,9 @@ export default async function SettingsPage() {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-[var(--border)] pb-3 last:border-0 last:pb-0">
-      <dt className="text-xs font-medium uppercase tracking-[0.08em] text-[var(--text-hint)]">
-        {label}
-      </dt>
-      <dd className="text-sm text-[var(--text-primary)]">{value}</dd>
+    <div className="flex items-center justify-between gap-4 border-b border-border pb-3 last:border-0 last:pb-0">
+      <dt className="text-xs font-medium uppercase tracking-[0.08em] text-text-hint">{label}</dt>
+      <dd className="text-sm text-text-primary">{value}</dd>
     </div>
   )
 }

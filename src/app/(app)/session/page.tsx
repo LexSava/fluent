@@ -144,13 +144,11 @@ function SessionContent() {
   if (!sessionId) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-6 py-12">
-        <MessageSquare size={64} className="text-[var(--accent)]" style={{ opacity: 0.6 }} />
+        <MessageSquare size={64} className="text-accent" style={{ opacity: 0.6 }} />
 
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-[22px] font-semibold text-[var(--text-primary)]">
-            Выбери формат занятия
-          </h1>
-          <p className="max-w-[360px] text-[15px] leading-relaxed text-[var(--text-secondary)]">
+          <h1 className="text-[22px] font-semibold text-text-primary">Выбери формат занятия</h1>
+          <p className="max-w-[360px] text-[15px] leading-relaxed text-text-secondary">
             Чтобы начать сессию, перейди на главную страницу и выбери формат
           </p>
         </div>
@@ -163,10 +161,10 @@ function SessionContent() {
               <button
                 key={format}
                 onClick={() => router.push('/dashboard?startSession=true')}
-                className="flex flex-col items-center gap-2 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-card)] px-3 py-4 text-center transition-colors duration-150 hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)]"
+                className="flex flex-col items-center gap-2 rounded-md border border-border bg-bg-card px-3 py-4 text-center transition-colors duration-150 hover:border-accent hover:bg-bg-elevated"
               >
-                <Icon size={20} className="text-[var(--text-hint)]" />
-                <span className="text-xs font-medium text-[var(--text-primary)]">{info.label}</span>
+                <Icon size={20} className="text-text-hint" />
+                <span className="text-xs font-medium text-text-primary">{info.label}</span>
               </button>
             )
           })}
@@ -174,7 +172,7 @@ function SessionContent() {
 
         <button
           onClick={() => router.push('/dashboard')}
-          className="rounded-[var(--radius-sm)] bg-[var(--accent)] px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          className="rounded-sm bg-accent px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
         >
           Перейти на главную
         </button>
@@ -189,13 +187,13 @@ function SessionContent() {
       <div className="flex items-center justify-between gap-3 pb-3">
         <button
           onClick={handleExit}
-          className="flex items-center gap-1.5 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+          className="flex items-center gap-1.5 text-sm text-text-secondary transition-colors hover:text-text-primary"
         >
           <ArrowLeft size={15} />
           Выйти
         </button>
 
-        <p className="text-sm font-semibold text-[var(--text-primary)]">{formatInfo.label}</p>
+        <p className="text-center text-sm font-semibold text-text-primary">{formatInfo.label}</p>
 
         <Button
           variant="ghost"
@@ -215,13 +213,13 @@ function SessionContent() {
 
       {/* Error banner */}
       {endError && (
-        <div className="mb-2 rounded-sm border border-[var(--error)] bg-[color-mix(in_srgb,var(--error)_10%,transparent)] px-3 py-2 text-xs text-[var(--error)]">
+        <div className="mb-2 rounded-sm border border-error bg-[color-mix(in_srgb,var(--error)_10%,transparent)] px-3 py-2 text-xs text-error">
           {endError}
         </div>
       )}
 
       {/* Chat — takes all remaining space; min-h-0 allows flex-1 children to shrink and scroll */}
-      <div className="flex min-h-0 flex-1 overflow-hidden border-t border-[var(--border)]">
+      <div className="flex min-h-0 flex-1 overflow-hidden border-t border-border">
         <ChatWindow
           sessionId={sessionId}
           sessionFormat={sessionFormat}
@@ -264,7 +262,7 @@ export default function SessionPage() {
     <Suspense
       fallback={
         <div className="flex h-full items-center justify-center">
-          <span className="size-6 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent" />
+          <span className="size-6 animate-spin rounded-full border-2 border-accent border-t-transparent" />
         </div>
       }
     >

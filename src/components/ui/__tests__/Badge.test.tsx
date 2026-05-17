@@ -9,22 +9,22 @@ describe('Badge', () => {
 
   it('applies neutral variant by default', () => {
     render(<Badge>Label</Badge>)
-    expect(screen.getByText('Label').className).toContain('border-[var(--border)]')
+    expect(screen.getByText('Label').className).toContain('border-border')
   })
 
   it('applies success variant styles', () => {
     render(<Badge variant="success">OK</Badge>)
-    expect(screen.getByText('OK').className).toContain('text-[var(--success)]')
+    expect(screen.getByText('OK').className).toContain('text-success')
   })
 
   it('applies error variant styles', () => {
     render(<Badge variant="error">Error</Badge>)
-    expect(screen.getByText('Error').className).toContain('text-[var(--error)]')
+    expect(screen.getByText('Error').className).toContain('text-error')
   })
 
   it('applies accent variant styles', () => {
     render(<Badge variant="accent">Accent</Badge>)
-    expect(screen.getByText('Accent').className).toContain('border-[var(--accent)]')
+    expect(screen.getByText('Accent').className).toContain('border-accent')
   })
 
   it('merges custom className', () => {

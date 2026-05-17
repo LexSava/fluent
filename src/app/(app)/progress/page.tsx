@@ -14,13 +14,13 @@ export default async function ProgressPage() {
 
   if (!data) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 rounded-md border border-[var(--border)] bg-[var(--bg-card)] py-20">
-        <p className="text-[14px] text-[var(--text-secondary)]">
+      <div className="flex flex-col items-center justify-center gap-3 rounded-md border border-border bg-bg-card py-20">
+        <p className="text-[14px] text-text-secondary">
           Не удалось загрузить данные. Попробуйте позже.
         </p>
         <Link
           href="/dashboard"
-          className="rounded-sm bg-[var(--accent)] px-4 py-2 text-[13px] font-semibold text-white"
+          className="rounded-sm bg-accent px-4 py-2 text-[13px] font-semibold text-white"
         >
           На главную
         </Link>
@@ -44,24 +44,20 @@ export default async function ProgressPage() {
   if (totalWords === 0) {
     return (
       <div className="flex flex-col gap-6">
-        <h1 className="text-[26px] font-bold tracking-[-0.03em] text-[var(--text-primary)]">
-          Мой прогресс
-        </h1>
-        <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-[var(--border)] bg-[var(--bg-card)] py-20">
-          <div className="flex h-16 w-16 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--bg-elevated)]">
-            <BookOpen size={32} className="text-[var(--accent)]" />
+        <h1 className="text-[26px] font-bold tracking-[-0.03em] text-text-primary">Мой прогресс</h1>
+        <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-border bg-bg-card py-20">
+          <div className="flex h-16 w-16 items-center justify-center rounded-md border border-border bg-bg-elevated">
+            <BookOpen size={32} className="text-accent" />
           </div>
           <div className="text-center">
-            <p className="text-[18px] font-semibold text-[var(--text-primary)]">
-              Начни своё первое занятие
-            </p>
-            <p className="mt-1 max-w-xs text-[14px] text-[var(--text-secondary)]">
+            <p className="text-[18px] font-semibold text-text-primary">Начни своё первое занятие</p>
+            <p className="mt-1 max-w-xs text-[14px] text-text-secondary">
               Здесь будет появляться твой прогресс, статистика сессий и изученные слова.
             </p>
           </div>
           <Link
             href="/dashboard"
-            className="rounded-sm bg-[var(--accent)] px-5 py-2.5 text-[13px] font-semibold text-white"
+            className="rounded-sm bg-accent px-5 py-2.5 text-[13px] font-semibold text-white"
           >
             Начать занятие
           </Link>
@@ -72,9 +68,7 @@ export default async function ProgressPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-[26px] font-bold tracking-[-0.03em] text-[var(--text-primary)]">
-        Мой прогресс
-      </h1>
+      <h1 className="text-[26px] font-bold tracking-[-0.03em] text-text-primary">Мой прогресс</h1>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Слов изучено" value={totalWords} color="accent" />
@@ -89,21 +83,19 @@ export default async function ProgressPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <div className="flex items-center justify-center rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
+        <div className="flex items-center justify-center rounded-md border border-border bg-bg-card p-4">
           <AccuracyRing value={accuracy} />
         </div>
 
-        <div className="flex flex-col gap-1 rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--text-hint)]">
+        <div className="flex flex-col gap-1 rounded-md border border-border bg-bg-card p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-hint">
             Серия дней
           </p>
           <div className="flex items-center gap-1">
-            <Flame size={20} className="text-[var(--warning)]" />
-            <span className="text-[28px] font-bold leading-none text-[var(--warning)]">
-              {streak}
-            </span>
+            <Flame size={20} className="text-warning" />
+            <span className="text-[28px] font-bold leading-none text-warning">{streak}</span>
           </div>
-          <p className="text-[11px] text-[var(--text-hint)]">
+          <p className="text-[11px] text-text-hint">
             {streak === 1 ? 'день подряд' : streak < 5 ? 'дня подряд' : 'дней подряд'}
           </p>
         </div>
@@ -112,24 +104,20 @@ export default async function ProgressPage() {
         <StatCard label="Новых слов" value={newWords} color="primary" />
       </div>
 
-      <section className="rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
-        <h2 className="mb-4 text-[18px] font-semibold text-[var(--text-primary)]">
-          Активность за неделю
-        </h2>
+      <section className="rounded-md border border-border bg-bg-card p-4">
+        <h2 className="mb-4 text-[18px] font-semibold text-text-primary">Активность за неделю</h2>
         <StatsChartWrapper data={weeklyActivity} />
       </section>
 
-      <section className="rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
-        <h2 className="mb-4 text-[18px] font-semibold text-[var(--text-primary)]">
-          История занятий
-        </h2>
+      <section className="rounded-md border border-border bg-bg-card p-4">
+        <h2 className="mb-4 text-[18px] font-semibold text-text-primary">История занятий</h2>
         <StreakCalendar weeklyActivity={weeklyActivity} />
       </section>
 
-      <section className="rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
+      <section className="rounded-md border border-border bg-bg-card p-4">
         <div className="mb-4 flex items-center gap-2">
-          <h2 className="text-[18px] font-semibold text-[var(--text-primary)]">Мой словарь</h2>
-          <span className="rounded-xs border border-[var(--border)] bg-[var(--bg-elevated)] px-2 py-0.5 text-[11px] font-semibold text-[var(--text-hint)]">
+          <h2 className="text-[18px] font-semibold text-text-primary">Мой словарь</h2>
+          <span className="rounded-xs border border-border bg-bg-elevated px-2 py-0.5 text-[11px] font-semibold text-text-hint">
             {totalWords} слов
           </span>
         </div>

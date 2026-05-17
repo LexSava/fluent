@@ -21,16 +21,16 @@ export function StreakBadge({ streak, className }: StreakBadgeProps) {
       className={cn(
         'inline-flex items-center gap-1.5 rounded-xs border px-2.5 py-1',
         active
-          ? 'border-[var(--warning)] bg-[color-mix(in_srgb,var(--warning)_12%,transparent)]'
-          : 'border-[var(--border)] bg-[var(--bg-elevated)]',
+          ? 'border-warning bg-[color-mix(in_srgb,var(--warning)_12%,transparent)]'
+          : 'border-border bg-bg-elevated',
         className
       )}
     >
-      <Flame size={13} className={active ? 'text-[var(--warning)]' : 'text-[var(--text-hint)]'} />
+      <Flame size={13} className={active ? 'text-warning' : 'text-text-hint'} />
       <span
         className={cn(
           'text-[11px] font-semibold uppercase tracking-[0.08em]',
-          active ? 'text-[var(--warning)]' : 'text-[var(--text-hint)]'
+          active ? 'text-warning' : 'text-text-hint'
         )}
       >
         {streak} {pluralDays(streak)} подряд

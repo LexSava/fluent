@@ -53,13 +53,13 @@ export function AnswerOptions({ content, onSelect }: Props) {
               onClick={() => handleClick(option)}
               disabled={selected !== null}
               className={cn(
-                'w-full rounded-[var(--radius-md)] border px-3 py-2 text-left text-sm',
+                'w-full rounded-md border px-3 py-2 text-left text-sm',
                 'transition-colors duration-150 disabled:cursor-default',
                 isSelected
-                  ? 'border-[var(--accent)] bg-[var(--accent)] text-white'
+                  ? 'border-accent bg-accent text-white'
                   : isDimmed
-                    ? 'border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text-hint)] opacity-50'
-                    : 'border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--accent-dim)]'
+                    ? 'border-border bg-bg-elevated text-text-hint opacity-50'
+                    : 'border-border bg-bg-elevated text-text-primary hover:border-accent hover:bg-accent-dim'
               )}
             >
               {option}

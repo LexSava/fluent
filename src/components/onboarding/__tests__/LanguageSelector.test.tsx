@@ -20,14 +20,14 @@ describe('LanguageSelector', () => {
   it('applies active styles to selected language', () => {
     render(<LanguageSelector value="de" onChange={jest.fn()} />)
     const deButton = screen.getByText('Немецкий').closest('button')!
-    expect(deButton.className).toContain('border-[var(--accent)]')
+    expect(deButton.className).toContain('border-accent')
   })
 
   it('applies inactive border style to unselected languages', () => {
     render(<LanguageSelector value="de" onChange={jest.fn()} />)
     const frButton = screen.getByText('Французский').closest('button')!
-    // inactive uses border-[var(--border)], not the direct (non-hover) accent border
-    expect(frButton.className).toContain('border-[var(--border)]')
+    // inactive uses border-border, not the direct (non-hover) accent border
+    expect(frButton.className).toContain('border-border')
   })
 
   it('renders 8 language options', () => {

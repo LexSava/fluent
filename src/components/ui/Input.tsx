@@ -19,27 +19,27 @@ export function Input({ label, error, className, id: externalId, ...props }: Inp
       {label && (
         <label
           htmlFor={id}
-          className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wide"
+          className="text-xs font-medium text-text-secondary uppercase tracking-wide"
         >
           {label}
-          {props.required && <span className="ml-1 text-[var(--error)]">*</span>}
+          {props.required && <span className="ml-1 text-error">*</span>}
         </label>
       )}
       <input
         id={id}
         className={cn(
-          'w-full rounded-[var(--radius-sm)] border border-[var(--border)]',
-          'bg-[var(--bg-card)] text-[var(--text-primary)] text-sm',
+          'w-full rounded-sm border border-border',
+          'bg-bg-card text-text-primary text-sm',
           'px-3 py-2 outline-none transition-colors duration-150',
-          'placeholder:text-[var(--text-hint)]',
-          'focus:border-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-1',
+          'placeholder:text-text-hint',
+          'focus:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1',
           'disabled:cursor-not-allowed disabled:opacity-50',
-          error && 'border-[var(--error)] focus:border-[var(--error)]',
+          error && 'border-error focus:border-error',
           className
         )}
         {...props}
       />
-      {error && <p className="text-xs text-[var(--error)]">{error}</p>}
+      {error && <p className="text-xs text-error">{error}</p>}
     </div>
   )
 }

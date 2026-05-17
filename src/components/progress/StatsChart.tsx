@@ -59,8 +59,8 @@ export default function StatsChart({ data }: Props) {
   if (isEmpty) {
     return (
       <div className="flex h-[200px] flex-col items-center justify-center gap-2">
-        <BarChart2 size={28} className="text-[var(--text-hint)]" />
-        <p className="text-[13px] text-[var(--text-hint)]">Нет активности за последние 7 дней</p>
+        <BarChart2 size={28} className="text-text-hint" />
+        <p className="text-[13px] text-text-hint">Нет активности за последние 7 дней</p>
       </div>
     )
   }

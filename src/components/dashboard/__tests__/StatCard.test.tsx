@@ -25,7 +25,7 @@ describe('StatCard', () => {
 
   it('applies success color class', () => {
     const { container } = render(<StatCard label="OK" value={5} color="success" />)
-    expect(container.querySelector('.text-\\[var\\(--success\\)\\]')).toBeInTheDocument()
+    expect(container.querySelector('.text-success')).toBeInTheDocument()
   })
 
   it('applies custom className to outer div', () => {

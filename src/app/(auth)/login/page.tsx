@@ -14,7 +14,7 @@ export default async function LoginPage({ searchParams }: Props) {
   return (
     <>
       {reset === 'success' && (
-        <div className="mb-4 rounded-md border border-[var(--success)] bg-[color-mix(in_srgb,var(--success)_10%,transparent)] px-4 py-3 text-sm text-[var(--success)]">
+        <div className="mb-4 rounded-md border border-success bg-[color-mix(in_srgb,var(--success)_10%,transparent)] px-4 py-3 text-sm text-success">
           Пароль обновлён — войдите с новым паролем.
         </div>
       )}

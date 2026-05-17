@@ -28,8 +28,8 @@ export function LanguageSelector({ value, onChange }: LanguageSelectorProps) {
           className={cn(
             'flex flex-col items-center gap-1.5 rounded-md border px-4 py-3 text-sm font-medium transition-colors duration-150',
             value === code
-              ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-[var(--accent)]'
-              : 'border-[var(--border)] bg-[var(--bg-card)] text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--text-primary)]'
+              ? 'border-accent bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-accent'
+              : 'border-border bg-bg-card text-text-secondary hover:border-accent hover:text-text-primary'
           )}
         >
           <span className="text-xl leading-none">{LANGUAGE_FLAGS[code]}</span>

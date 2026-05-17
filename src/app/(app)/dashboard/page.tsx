@@ -82,12 +82,12 @@ export default async function DashboardPage() {
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-[26px] font-bold tracking-[-0.03em] text-[var(--text-primary)]">
+          <h1 className="text-[26px] font-bold tracking-[-0.03em] text-text-primary">
             Привет, {firstName} 👋
           </h1>
           {langLabel && (
-            <p className="mt-0.5 text-sm text-[var(--text-secondary)]">
-              Изучаешь: <span className="font-medium text-[var(--text-primary)]">{langLabel}</span>
+            <p className="mt-0.5 text-sm text-text-secondary">
+              Изучаешь: <span className="font-medium text-text-primary">{langLabel}</span>
             </p>
           )}
         </div>
@@ -96,7 +96,7 @@ export default async function DashboardPage() {
 
       {/* Stats */}
       <section>
-        <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--text-hint)]">
+        <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-text-hint">
           Статистика
         </h2>
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -124,9 +124,7 @@ export default async function DashboardPage() {
 
       {/* Session picker */}
       <section id="session-picker">
-        <h2 className="mb-3 text-[18px] font-semibold text-[var(--text-primary)]">
-          Начать занятие
-        </h2>
+        <h2 className="mb-3 text-[18px] font-semibold text-text-primary">Начать занятие</h2>
         <SessionPicker />
       </section>
     </div>
