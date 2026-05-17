@@ -92,6 +92,7 @@ export function ChatWindow({
   const messagesContainerRef = useRef<HTMLDivElement>(null)
   const initSentRef = useRef(false)
   const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const forceScrollRef = useRef(false)
 
   // Scroll to bottom whenever content height grows (new messages or typewriter animation).
   // ResizeObserver fires after layout, so the DOM is always fully measured.
@@ -143,12 +144,26 @@ export function ChatWindow({
       initSentRef.current = true
       if (stored.length === 0) {
         void sendMessage(INIT_TEXT, [])
+      } else {
+        // Restored session: scroll to bottom instantly after DOM paint
+        requestAnimationFrame(() => {
+          const container = scrollContainerRef.current
+          if (container) container.scrollTop = container.scrollHeight
+        })
       }
     }
     return () => {
       if (errorTimerRef.current) clearTimeout(errorTimerRef.current)
     }
   }, [])
+
+  // Smooth scroll after user sends a message (forceScrollRef set in handleSend)
+  useEffect(() => {
+    if (!forceScrollRef.current) return
+    forceScrollRef.current = false
+    const container = scrollContainerRef.current
+    if (container) container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
+  }, [messages])
 
   function showError(msg: string) {
     setError(msg)
@@ -245,6 +260,7 @@ export function ChatWindow({
 
   function handleSend(text: string) {
     if (isLoading) return
+    forceScrollRef.current = true
     void sendMessage(text, messages)
   }
 

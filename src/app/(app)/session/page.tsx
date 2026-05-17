@@ -43,7 +43,15 @@ function SessionContent() {
   const sessionFormat =
     rawFormat in SessionFormat ? (rawFormat as SessionFormat) : SessionFormat.VOCABULARY
 
-  const [exerciseScores, setExerciseScores] = useState<number[]>([])
+  const [exerciseScores, setExerciseScores] = useState<number[]>(() => {
+    try {
+      const raw = sessionStorage.getItem(`exercise_count_${sessionId}`)
+      const count = raw ? parseInt(raw, 10) : 0
+      return Array(count).fill(0)
+    } catch {
+      return []
+    }
+  })
   const [isCompleting, setIsCompleting] = useState(false)
   const [endError, setEndError] = useState<string | null>(null)
   const [showExitModal, setShowExitModal] = useState(false)
