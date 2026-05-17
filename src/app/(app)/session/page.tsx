@@ -43,20 +43,23 @@ function SessionContent() {
   const sessionFormat =
     rawFormat in SessionFormat ? (rawFormat as SessionFormat) : SessionFormat.VOCABULARY
 
-  const [exerciseScores, setExerciseScores] = useState<number[]>(() => {
-    try {
-      const raw = sessionStorage.getItem(`exercise_count_${sessionId}`)
-      const count = raw ? parseInt(raw, 10) : 0
-      return Array(count).fill(0)
-    } catch {
-      return []
-    }
-  })
+  const [exerciseScores, setExerciseScores] = useState<number[]>([])
   const [isCompleting, setIsCompleting] = useState(false)
   const [endError, setEndError] = useState<string | null>(null)
   const [showExitModal, setShowExitModal] = useState(false)
   const [showFinishModal, setShowFinishModal] = useState(false)
   const endErrorTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Load exercise count from sessionStorage after hydration to avoid mismatch
+  useEffect(() => {
+    if (!sessionId) return
+    try {
+      const raw = sessionStorage.getItem(`exercise_count_${sessionId}`)
+      const count = raw ? parseInt(raw, 10) : 0
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      if (count > 0) setExerciseScores(Array(count).fill(0))
+    } catch {}
+  }, [sessionId])
 
   // Redirect to saved session if URL has no sessionId
   useEffect(() => {

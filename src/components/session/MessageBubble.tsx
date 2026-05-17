@@ -30,11 +30,11 @@ function stripJsonBlock(content: string): string {
 
 function parseScore(content: string): { text: string; score: ScoreBlock | null } {
   const match = content.match(JSON_FENCE_RE)
-  if (!match) return { text: content, score: null }
+  if (!match) return { text: stripJsonBlock(content), score: null }
 
   try {
     const parsed = JSON.parse(match[1]) as Record<string, unknown>
-    if (typeof parsed.score !== 'number') return { text: content, score: null }
+    if (typeof parsed.score !== 'number') return { text: stripJsonBlock(content), score: null }
 
     return {
       text: content.replace(match[0], '').trim(),

@@ -39,7 +39,7 @@ export const RegisterSchema = z
     }
   })
 
-// Серверные схемы без confirmPassword (client-side only поле)
+// Server-side schemas without confirmPassword (client-side only field)
 export const RegisterApiSchema = z.object({
   name: z
     .string()

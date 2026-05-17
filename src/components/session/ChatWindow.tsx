@@ -80,19 +80,18 @@ export function ChatWindow({
   onComplete,
   onExerciseDone,
 }: ChatWindowProps) {
-  const [messages, setMessages] = useState<LocalMessage[]>(() => loadStoredMessages(sessionId))
+  const [messages, setMessages] = useState<LocalMessage[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [streamingId, setStreamingId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [exerciseCount, setExerciseCount] = useState<number>(() =>
-    loadStoredExerciseCount(sessionId)
-  )
+  const [exerciseCount, setExerciseCount] = useState<number>(0)
 
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
   const initSentRef = useRef(false)
   const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const forceScrollRef = useRef(false)
+  const isMountedRef = useRef(false)
 
   // Scroll to bottom whenever content height grows (new messages or typewriter animation).
   // ResizeObserver fires after layout, so the DOM is always fully measured.
@@ -116,12 +115,14 @@ export function ChatWindow({
   }, [])
 
   useEffect(() => {
+    if (!isMountedRef.current) return
     try {
       sessionStorage.setItem(`chat_messages_${sessionId}`, JSON.stringify(messages))
     } catch {}
   }, [messages, sessionId])
 
   useEffect(() => {
+    if (!isMountedRef.current) return
     try {
       sessionStorage.setItem(`exercise_count_${sessionId}`, String(exerciseCount))
     } catch {}
@@ -139,12 +140,18 @@ export function ChatWindow({
   }, [sessionId, sessionFormat])
 
   useEffect(() => {
+    isMountedRef.current = true
     const stored = loadStoredMessages(sessionId)
+    const storedCount = loadStoredExerciseCount(sessionId)
     if (!initSentRef.current) {
       initSentRef.current = true
       if (stored.length === 0) {
         void sendMessage(INIT_TEXT, [])
       } else {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMessages(stored)
+
+        setExerciseCount(storedCount)
         // Restored session: scroll to bottom instantly after DOM paint
         requestAnimationFrame(() => {
           const container = scrollContainerRef.current
@@ -218,7 +225,7 @@ export function ChatWindow({
         )
       }
 
-      handleFinish(fullContent)
+      handleFinish(fullContent, newMessages)
     } catch (err) {
       console.error('Chat error:', err)
       showError('Ошибка соединения. Попробуйте снова.')
@@ -229,7 +236,13 @@ export function ChatWindow({
     }
   }
 
-  function handleFinish(content: string) {
+  function handleFinish(content: string, contextMessages: LocalMessage[]) {
+    // Skip scoring if the user hasn't actually answered yet (first AI message)
+    const hasRealUserMessage = contextMessages.some(
+      (m) => m.role === 'user' && m.content !== INIT_TEXT
+    )
+    if (!hasRealUserMessage) return
+
     const match = content.match(JSON_FENCE_RE)
     if (!match) return
 

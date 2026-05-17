@@ -28,12 +28,13 @@ export async function POST(req: Request) {
       take: MAX_DUE_ITEMS,
       select: { id: true },
     })
-    dueItemIds = items.map((i) => i.id)
-    await setDueItemsCache(userId, dueItemIds)
+    const ids: string[] = items.map((i: { id: string }) => i.id)
+    await setDueItemsCache(userId, ids)
+    dueItemIds = ids
   }
 
   const dueItems = await prisma.vocabItem.findMany({
-    where: { id: { in: dueItemIds.slice(0, MAX_DUE_ITEMS) } },
+    where: { id: { in: (dueItemIds ?? []).slice(0, MAX_DUE_ITEMS) } },
     orderBy: { dueAt: 'asc' },
   })
 
