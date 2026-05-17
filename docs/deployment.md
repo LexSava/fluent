@@ -15,6 +15,7 @@ Live URL: https://fluent-ai-web.vercel.app
 ## CI/CD Pipeline
 
 The pipeline runs on GitHub Actions via `.github/workflows/ci.yml`. It triggers on:
+
 - Every push to `main`
 - Every pull request targeting `main`
 
@@ -35,6 +36,7 @@ Runs on Ubuntu with Node.js 20. Steps:
 **Requires:** `code-quality` to pass.
 
 Steps:
+
 1. Check out and install dependencies
 2. `npm run test:coverage` — run all Jest tests with coverage
 3. Upload the `coverage/` directory as a GitHub Actions artifact (7-day retention)
@@ -44,6 +46,7 @@ Steps:
 **Requires:** `test` to pass.
 
 Steps:
+
 1. Check out and install dependencies
 2. Inject all GitHub Secrets as environment variables
 3. `npm run build` — runs `prisma generate && next build`
@@ -58,38 +61,38 @@ All variables must be set in both `.env.local` (local development) and the Verce
 
 ### Database
 
-| Variable | Description | Where to get it |
-|----------|-------------|-----------------|
+| Variable       | Description                                          | Where to get it                                                          |
+| -------------- | ---------------------------------------------------- | ------------------------------------------------------------------------ |
 | `DATABASE_URL` | PostgreSQL connection string with connection pooling | Neon project dashboard → Connection Details → select "Pooled connection" |
 
 The URL must point to the **pooled** endpoint, not the direct connection. Neon's pooler is required for serverless environments.
 
 ### AI
 
-| Variable | Description | Where to get it |
-|----------|-------------|-----------------|
+| Variable            | Description       | Where to get it                          |
+| ------------------- | ----------------- | ---------------------------------------- |
 | `ANTHROPIC_API_KEY` | Anthropic API key | https://console.anthropic.com → API Keys |
 
 ### Authentication
 
-| Variable | Description | Where to get it |
-|----------|-------------|-----------------|
-| `NEXTAUTH_SECRET` | Secret for signing JWT tokens | Run `openssl rand -base64 32` in a terminal |
-| `NEXTAUTH_URL` | Full URL of the deployed application | `http://localhost:3000` for dev; `https://fluent-ai-web.vercel.app` for production |
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID | Google Cloud Console → APIs & Services → Credentials |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | Same as above |
+| Variable               | Description                          | Where to get it                                                                    |
+| ---------------------- | ------------------------------------ | ---------------------------------------------------------------------------------- |
+| `NEXTAUTH_SECRET`      | Secret for signing JWT tokens        | Run `openssl rand -base64 32` in a terminal                                        |
+| `NEXTAUTH_URL`         | Full URL of the deployed application | `http://localhost:3000` for dev; `https://fluent-ai-web.vercel.app` for production |
+| `GOOGLE_CLIENT_ID`     | Google OAuth client ID               | Google Cloud Console → APIs & Services → Credentials                               |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret           | Same as above                                                                      |
 
 ### Caching
 
-| Variable | Description | Where to get it |
-|----------|-------------|-----------------|
-| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST endpoint URL | Upstash console → Database → REST API |
-| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis authentication token | Same as above |
+| Variable                   | Description                        | Where to get it                       |
+| -------------------------- | ---------------------------------- | ------------------------------------- |
+| `UPSTASH_REDIS_REST_URL`   | Upstash Redis REST endpoint URL    | Upstash console → Database → REST API |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis authentication token | Same as above                         |
 
 ### Email
 
-| Variable | Description | Where to get it |
-|----------|-------------|-----------------|
+| Variable         | Description                                      | Where to get it               |
+| ---------------- | ------------------------------------------------ | ----------------------------- |
 | `RESEND_API_KEY` | Resend API key for sending password reset emails | https://resend.com → API Keys |
 
 ---
@@ -116,12 +119,14 @@ Google OAuth requires exact redirect URIs to be registered in the Google Cloud C
 
 **For local development:**
 Add to "Authorized redirect URIs":
+
 ```
 http://localhost:3000/api/auth/callback/google
 ```
 
 **For production:**
 Add:
+
 ```
 https://fluent-ai-web.vercel.app/api/auth/callback/google
 ```
@@ -157,12 +162,12 @@ To prevent direct pushes to `main` and require CI to pass before merging:
 
 ## `.env.local` vs Vercel Environment Variables
 
-| Aspect | `.env.local` | Vercel dashboard |
-|--------|-------------|------------------|
-| Used in | Local development only | Production and preview deployments |
-| Committed to git | Never (listed in `.gitignore`) | No — stored encrypted in Vercel |
-| Access | Only on your machine | All Vercel deployment environments |
-| Updating | Edit the file directly | Vercel dashboard → Project → Settings → Environment Variables |
+| Aspect           | `.env.local`                   | Vercel dashboard                                              |
+| ---------------- | ------------------------------ | ------------------------------------------------------------- |
+| Used in          | Local development only         | Production and preview deployments                            |
+| Committed to git | Never (listed in `.gitignore`) | No — stored encrypted in Vercel                               |
+| Access           | Only on your machine           | All Vercel deployment environments                            |
+| Updating         | Edit the file directly         | Vercel dashboard → Project → Settings → Environment Variables |
 
 After updating environment variables in the Vercel dashboard, a new deployment is required for the changes to take effect. Trigger it by pushing any commit to `main`.
 

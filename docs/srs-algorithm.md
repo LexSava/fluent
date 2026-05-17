@@ -22,14 +22,14 @@ The core implementation lives in `src/lib/srs.ts`.
 
 Each review takes a `grade` between 0 and 5:
 
-| Grade | Meaning |
-|-------|---------|
-| 0 | Complete blackout — no recall at all |
-| 1 | Incorrect, but on seeing the answer it was recognizable |
-| 2 | Incorrect, but the answer felt easy once seen |
-| 3 | Correct with significant difficulty |
-| 4 | Correct with some hesitation |
-| 5 | Perfect recall with no hesitation |
+| Grade | Meaning                                                 |
+| ----- | ------------------------------------------------------- |
+| 0     | Complete blackout — no recall at all                    |
+| 1     | Incorrect, but on seeing the answer it was recognizable |
+| 2     | Incorrect, but the answer felt easy once seen           |
+| 3     | Correct with significant difficulty                     |
+| 4     | Correct with some hesitation                            |
+| 5     | Perfect recall with no hesitation                       |
 
 ### Ease Factor Update Formula
 
@@ -67,13 +67,13 @@ After computing the new interval, the next review is scheduled at **midnight UTC
 
 ## VocabItem Fields Related to SRS
 
-| Field | Type | Role |
-|-------|------|------|
-| `repetitions` | Int | Number of consecutive successful reviews. Resets to 0 on failure. |
-| `easeFactor` | Float | Difficulty multiplier. Starts at 2.5; minimum 1.3. |
-| `interval` | Int | Days until next review. |
-| `dueAt` | DateTime | Absolute date when the item is next due for review. |
-| `lastScore` | Int? | The grade (0–5) from the most recent review, stored for analytics. |
+| Field         | Type     | Role                                                               |
+| ------------- | -------- | ------------------------------------------------------------------ |
+| `repetitions` | Int      | Number of consecutive successful reviews. Resets to 0 on failure.  |
+| `easeFactor`  | Float    | Difficulty multiplier. Starts at 2.5; minimum 1.3.                 |
+| `interval`    | Int      | Days until next review.                                            |
+| `dueAt`       | DateTime | Absolute date when the item is next due for review.                |
+| `lastScore`   | Int?     | The grade (0–5) from the most recent review, stored for analytics. |
 
 ---
 
@@ -81,14 +81,14 @@ After computing the new interval, the next review is scheduled at **midnight UTC
 
 The tutor returns a `score` (0–10) in its JSON response. This is converted to an SM-2 `grade` (0–5) by the `gradeFromScore()` function in `src/lib/srs.ts`:
 
-| Score range | Grade | Interpretation |
-|-------------|-------|----------------|
-| 0–1 | 0 | Complete failure |
-| 2–3 | 1 | Poor — mostly incorrect |
-| 4 | 2 | Weak — incorrect but close |
-| 5–6 | 3 | Acceptable — correct with difficulty |
-| 7–8 | 4 | Good — correct with minor hesitation |
-| 9–10 | 5 | Excellent — perfect recall |
+| Score range | Grade | Interpretation                       |
+| ----------- | ----- | ------------------------------------ |
+| 0–1         | 0     | Complete failure                     |
+| 2–3         | 1     | Poor — mostly incorrect              |
+| 4           | 2     | Weak — incorrect but close           |
+| 5–6         | 3     | Acceptable — correct with difficulty |
+| 7–8         | 4     | Good — correct with minor hesitation |
+| 9–10        | 5     | Excellent — perfect recall           |
 
 ---
 
@@ -101,6 +101,7 @@ The tutor returns a `score` (0–10) in its JSON response. This is converted to 
 5. `lastScore` is updated to the grade.
 
 For a word with EF = 2.5 after the second successful review:
+
 - Third review: interval = `round(6 × 2.5)` = 15 days
 - Fourth review: interval = `round(15 × 2.5)` = 38 days
 - Fifth review: interval = `round(38 × 2.5)` = 95 days
@@ -123,16 +124,16 @@ The word effectively restarts its learning cycle from scratch, but EF carries me
 
 Suppose a user learns the German word **"Schlüssel" (key)**:
 
-| Event | Score | Grade | Repetitions | Interval | EF | Due in |
-|-------|-------|-------|-------------|----------|----|--------|
-| Added | — | — | 0 | 0 | 2.50 | Today |
-| First review | 7/10 | 4 | 1 | 1 day | 2.50 | Tomorrow |
-| Second review | 9/10 | 5 | 2 | 6 days | 2.60 | +6 days |
-| Third review | 8/10 | 4 | 3 | 16 days | 2.60 | +16 days |
-| Fourth review | 4/10 | 2 | 0 (reset) | 1 day | 2.42 | Tomorrow |
-| Fifth review | 9/10 | 5 | 1 | 1 day | 2.52 | Tomorrow |
-| Sixth review | 10/10 | 5 | 2 | 6 days | 2.62 | +6 days |
-| Seventh review | 9/10 | 5 | 3 | 16 days | 2.72 | +16 days |
+| Event          | Score | Grade | Repetitions | Interval | EF   | Due in   |
+| -------------- | ----- | ----- | ----------- | -------- | ---- | -------- |
+| Added          | —     | —     | 0           | 0        | 2.50 | Today    |
+| First review   | 7/10  | 4     | 1           | 1 day    | 2.50 | Tomorrow |
+| Second review  | 9/10  | 5     | 2           | 6 days   | 2.60 | +6 days  |
+| Third review   | 8/10  | 4     | 3           | 16 days  | 2.60 | +16 days |
+| Fourth review  | 4/10  | 2     | 0 (reset)   | 1 day    | 2.42 | Tomorrow |
+| Fifth review   | 9/10  | 5     | 1           | 1 day    | 2.52 | Tomorrow |
+| Sixth review   | 10/10 | 5     | 2           | 6 days   | 2.62 | +6 days  |
+| Seventh review | 9/10  | 5     | 3           | 16 days  | 2.72 | +16 days |
 
 After two full cycles without failure, the word would reach intervals of 40+ days and be considered effectively mastered.
 

@@ -6,21 +6,21 @@ This document describes the testing setup in Fluent — how to run tests, what i
 
 ## Test Stack
 
-| Tool | Version | Role |
-|------|---------|------|
-| Jest | 30.x | Test runner and assertion library |
-| React Testing Library | 16.x | Component rendering and interaction |
-| jest-dom | Latest | Additional DOM matchers (e.g. `toBeInTheDocument`) |
-| jsdom | Built into Jest | Browser environment simulation |
+| Tool                  | Version         | Role                                               |
+| --------------------- | --------------- | -------------------------------------------------- |
+| Jest                  | 30.x            | Test runner and assertion library                  |
+| React Testing Library | 16.x            | Component rendering and interaction                |
+| jest-dom              | Latest          | Additional DOM matchers (e.g. `toBeInTheDocument`) |
+| jsdom                 | Built into Jest | Browser environment simulation                     |
 
 ---
 
 ## Running Tests
 
-| Command | Description |
-|---------|-------------|
-| `npm run test` | Run all tests once and exit |
-| `npm run test:watch` | Run tests in watch mode (re-runs on file change) |
+| Command                 | Description                                                |
+| ----------------------- | ---------------------------------------------------------- |
+| `npm run test`          | Run all tests once and exit                                |
+| `npm run test:watch`    | Run tests in watch mode (re-runs on file change)           |
 | `npm run test:coverage` | Run all tests with coverage report (output to `coverage/`) |
 
 Coverage reports are uploaded as artifacts in CI (7-day retention).
@@ -57,6 +57,7 @@ Coverage reports are uploaded as artifacts in CI (7-day retention).
 **`src/lib/__tests__/utils.test.ts`** — Utility function tests (e.g. the `cn()` classname merger).
 
 **`src/lib/__tests__/validations.test.ts`** — Zod schema validation tests:
+
 - Valid email/password combinations pass
 - Weak passwords fail with the correct error messages
 - Missing fields produce the expected errors
@@ -66,28 +67,34 @@ Coverage reports are uploaded as artifacts in CI (7-day retention).
 Component tests use React Testing Library to render components and assert on DOM output.
 
 **`src/components/auth/__tests__/`**
+
 - LoginForm renders the email and password fields
 - RegisterForm shows validation errors on empty submission
 - PasswordStrengthIndicator shows the correct strength level
 
 **`src/components/dashboard/__tests__/`**
+
 - StatCard renders the value and label
 - SessionPicker renders all six format cards
 
 **`src/components/layout/__tests__/`**
+
 - Header renders the app logo and navigation links
 - Sidebar highlights the active route
 
 **`src/components/session/__tests__/`**
+
 - MessageBubble renders user and assistant messages with correct styles
 - InputBar calls `onSubmit` when the form is submitted
 - ProgressBar shows the correct progress ratio
 
 **`src/components/progress/__tests__/`**
+
 - AccuracyRing renders with the correct percentage
 - VocabList renders the vocabulary item terms
 
 **`src/components/ui/__tests__/`**
+
 - Button renders with the correct variant class
 - Input shows an error message when `error` prop is set
 
@@ -133,7 +140,7 @@ render(
 If you need to test logic that calls Prisma, use `jest.mock("@/lib/prisma")` and provide mock return values:
 
 ```typescript
-jest.mock("@/lib/prisma", () => ({
+jest.mock('@/lib/prisma', () => ({
   prisma: {
     vocabItem: {
       findMany: jest.fn().mockResolvedValue([]),

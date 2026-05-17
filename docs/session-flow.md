@@ -86,6 +86,7 @@ When the assistant message stream ends:
 ## Phase 3: Ending a Session
 
 The session ends when:
+
 - The user clicks the "End session" button in the UI, or
 - The exercise counter reaches the configured maximum (typically 10).
 
@@ -113,11 +114,11 @@ After receiving the response, `ChatWindow` clears all `sessionStorage` keys for 
 
 `sessionStorage` (not `localStorage`) is used intentionally — it is scoped to the browser tab, so two different sessions in different tabs don't interfere with each other.
 
-| Key | Value | Purpose |
-|-----|-------|---------|
-| `active_session` | JSON `{ sessionId, format, dueItems }` | Active session metadata |
-| `chat_messages_{sessionId}` | JSON array of messages | Full message history for recovery on refresh |
-| `exercise_count_{sessionId}` | Number string | Current exercise count for the progress bar |
+| Key                          | Value                                  | Purpose                                      |
+| ---------------------------- | -------------------------------------- | -------------------------------------------- |
+| `active_session`             | JSON `{ sessionId, format, dueItems }` | Active session metadata                      |
+| `chat_messages_{sessionId}`  | JSON array of messages                 | Full message history for recovery on refresh |
+| `exercise_count_{sessionId}` | Number string                          | Current exercise count for the progress bar  |
 
 All keys are cleared when the session ends.
 
@@ -125,14 +126,14 @@ All keys are cleared when the session ends.
 
 ## Session Formats Compared
 
-| Format | AI behavior | Primary skill trained |
-|--------|-------------|----------------------|
-| REVIEW | Cycles through due words: translation → back-translation → sentence | Long-term vocabulary retention |
-| VOCABULARY | New words in context, fill-in-the-blank, multiple choice | Vocabulary acquisition |
-| GRAMMAR | Fill-the-gap, error correction, sentence transformation | Grammar accuracy |
-| READING | Short text followed by a comprehension question | Reading comprehension |
-| WRITING | Free writing prompt with detailed feedback | Writing fluency |
-| SPEAKING | Open dialogue with gentle corrections | Speaking confidence and fluency |
+| Format     | AI behavior                                                         | Primary skill trained           |
+| ---------- | ------------------------------------------------------------------- | ------------------------------- |
+| REVIEW     | Cycles through due words: translation → back-translation → sentence | Long-term vocabulary retention  |
+| VOCABULARY | New words in context, fill-in-the-blank, multiple choice            | Vocabulary acquisition          |
+| GRAMMAR    | Fill-the-gap, error correction, sentence transformation             | Grammar accuracy                |
+| READING    | Short text followed by a comprehension question                     | Reading comprehension           |
+| WRITING    | Free writing prompt with detailed feedback                          | Writing fluency                 |
+| SPEAKING   | Open dialogue with gentle corrections                               | Speaking confidence and fluency |
 
 ---
 

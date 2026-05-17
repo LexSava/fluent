@@ -22,6 +22,7 @@ The NextAuth handler is registered at `src/app/api/auth/[...nextauth]/route.ts` 
 Users sign in with an email and a bcrypt-hashed password stored in the `User.passwordHash` field.
 
 On sign-in attempt:
+
 1. The user record is looked up by email.
 2. If no record exists, or `passwordHash` is null (OAuth-only account), sign-in fails.
 3. `bcrypt.compare()` validates the submitted password against the stored hash.
@@ -48,10 +49,10 @@ The `session()` callback exposes `user.id` and `user.isOnboarded` on the session
 ## Using Auth in Server Components
 
 ```typescript
-import { auth } from "@/lib/auth"
+import { auth } from '@/lib/auth'
 
 const session = await auth()
-if (!session) redirect("/login")
+if (!session) redirect('/login')
 
 const userId = session.user.id
 ```
@@ -63,7 +64,7 @@ The `auth()` function decodes the JWT cookie and returns the session or null. It
 ## Using Auth in Client Components
 
 ```typescript
-import { useSession } from "next-auth/react"
+import { useSession } from 'next-auth/react'
 
 const { data: session, status } = useSession()
 ```
@@ -78,6 +79,7 @@ const { data: session, status } = useSession()
 2. The form validates locally using the Zod schema from `src/lib/validations/auth.ts`.
 
 **Password requirements:**
+
 - Minimum 8 characters
 - At least one uppercase letter
 - At least one lowercase letter
@@ -113,12 +115,12 @@ const { data: session, status } = useSession()
 
 ## Protected Routes
 
-| Route | Protection mechanism |
-|-------|----------------------|
-| `/dashboard`, `/progress`, `/session`, `/settings` | Server Component calls `auth()`, redirects to `/login` if null |
-| `/onboarding` | Server Component calls `auth()`, redirects to `/login` if null |
-| All `/api/*` routes except `/api/auth/*` | Route handler calls `auth()`, returns 401 if null |
-| `(auth)` pages (login, register, reset-password) | Public — no protection, redirect to `/dashboard` if already signed in |
+| Route                                              | Protection mechanism                                                  |
+| -------------------------------------------------- | --------------------------------------------------------------------- |
+| `/dashboard`, `/progress`, `/session`, `/settings` | Server Component calls `auth()`, redirects to `/login` if null        |
+| `/onboarding`                                      | Server Component calls `auth()`, redirects to `/login` if null        |
+| All `/api/*` routes except `/api/auth/*`           | Route handler calls `auth()`, returns 401 if null                     |
+| `(auth)` pages (login, register, reset-password)   | Public — no protection, redirect to `/dashboard` if already signed in |
 
 ---
 

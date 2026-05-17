@@ -21,20 +21,20 @@ Creates a new user account with email and password.
 
 **Request body:**
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `email` | String | Yes | Must be a valid email address |
-| `password` | String | Yes | Must meet password complexity requirements |
-| `name` | String | No | Display name |
+| Field      | Type   | Required | Description                                |
+| ---------- | ------ | -------- | ------------------------------------------ |
+| `email`    | String | Yes      | Must be a valid email address              |
+| `password` | String | Yes      | Must meet password complexity requirements |
+| `name`     | String | No       | Display name                               |
 
 **Responses:**
 
-| Status | Body | Condition |
-|--------|------|-----------|
-| 201 | `{ user: { id, email } }` | Account created successfully |
-| 400 | `{ error: "Email already in use" }` | Email is taken |
-| 400 | `{ error: "Validation error", details: [...] }` | Password fails Zod validation |
-| 500 | `{ error: "Internal server error" }` | Unexpected failure |
+| Status | Body                                            | Condition                     |
+| ------ | ----------------------------------------------- | ----------------------------- |
+| 201    | `{ user: { id, email } }`                       | Account created successfully  |
+| 400    | `{ error: "Email already in use" }`             | Email is taken                |
+| 400    | `{ error: "Validation error", details: [...] }` | Password fails Zod validation |
+| 500    | `{ error: "Internal server error" }`            | Unexpected failure            |
 
 **Authorization required:** No
 
@@ -46,15 +46,15 @@ Initiates the password reset flow by creating a one-time token and sending an em
 
 **Request body:**
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `email` | String | Yes | The user's registered email address |
+| Field   | Type   | Required | Description                         |
+| ------- | ------ | -------- | ----------------------------------- |
+| `email` | String | Yes      | The user's registered email address |
 
 **Responses:**
 
-| Status | Body | Condition |
-|--------|------|-----------|
-| 200 | `{ message: "If that email exists, a reset link has been sent." }` | Always (prevents email enumeration) |
+| Status | Body                                                               | Condition                           |
+| ------ | ------------------------------------------------------------------ | ----------------------------------- |
+| 200    | `{ message: "If that email exists, a reset link has been sent." }` | Always (prevents email enumeration) |
 
 **Authorization required:** No
 
@@ -66,18 +66,18 @@ Validates a reset token and updates the user's password.
 
 **Request body:**
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `token` | String | Yes | UUID token from the reset email |
-| `password` | String | Yes | New password (must meet complexity requirements) |
+| Field      | Type   | Required | Description                                      |
+| ---------- | ------ | -------- | ------------------------------------------------ |
+| `token`    | String | Yes      | UUID token from the reset email                  |
+| `password` | String | Yes      | New password (must meet complexity requirements) |
 
 **Responses:**
 
-| Status | Body | Condition |
-|--------|------|-----------|
-| 200 | `{ message: "Password updated." }` | Success |
-| 400 | `{ error: "Invalid or expired token" }` | Token not found or past expiry |
-| 400 | `{ error: "Validation error" }` | Password fails validation |
+| Status | Body                                    | Condition                      |
+| ------ | --------------------------------------- | ------------------------------ |
+| 200    | `{ message: "Password updated." }`      | Success                        |
+| 400    | `{ error: "Invalid or expired token" }` | Token not found or past expiry |
+| 400    | `{ error: "Validation error" }`         | Password fails validation      |
 
 **Authorization required:** No
 
@@ -91,11 +91,11 @@ Streams an AI tutor response for the current session. Returns a plain UTF-8 text
 
 **Request body:**
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `messages` | Array | Yes | Full conversation history in `{ role, content }` format |
-| `sessionId` | String | Yes | Active learning session ID |
-| `format` | SessionFormat | Yes | One of: REVIEW, VOCABULARY, GRAMMAR, READING, WRITING, SPEAKING |
+| Field       | Type          | Required | Description                                                     |
+| ----------- | ------------- | -------- | --------------------------------------------------------------- |
+| `messages`  | Array         | Yes      | Full conversation history in `{ role, content }` format         |
+| `sessionId` | String        | Yes      | Active learning session ID                                      |
+| `format`    | SessionFormat | Yes      | One of: REVIEW, VOCABULARY, GRAMMAR, READING, WRITING, SPEAKING |
 
 **Response:**
 
@@ -105,12 +105,12 @@ Streams an AI tutor response for the current session. Returns a plain UTF-8 text
 
 **Responses:**
 
-| Status | Condition |
-|--------|-----------|
-| 200 | Stream started successfully |
-| 401 | No valid session |
-| 429 | Rate limit exceeded |
-| 500 | AI provider error |
+| Status | Condition                   |
+| ------ | --------------------------- |
+| 200    | Stream started successfully |
+| 401    | No valid session            |
+| 429    | Rate limit exceeded         |
+| 500    | AI provider error           |
 
 **Authorization required:** Yes
 
@@ -124,9 +124,9 @@ Creates a new learning session and returns due vocabulary items.
 
 **Request body:**
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `format` | SessionFormat | Yes | Session format to start |
+| Field    | Type          | Required | Description             |
+| -------- | ------------- | -------- | ----------------------- |
+| `format` | SessionFormat | Yes      | Session format to start |
 
 **Response (200):**
 
@@ -164,9 +164,9 @@ Closes an active session and calculates aggregate scores.
 
 **Request body:**
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `sessionId` | String | Yes | ID of the session to close |
+| Field       | Type   | Required | Description                |
+| ----------- | ------ | -------- | -------------------------- |
+| `sessionId` | String | Yes      | ID of the session to close |
 
 **Response (200):**
 
@@ -184,12 +184,12 @@ Closes an active session and calculates aggregate scores.
 
 **Responses:**
 
-| Status | Body | Condition |
-|--------|------|-----------|
-| 200 | Updated session object | Success |
-| 401 | `{ error: "Unauthorized" }` | No session |
-| 403 | `{ error: "Forbidden" }` | Session belongs to another user |
-| 404 | `{ error: "Session not found" }` | Invalid session ID |
+| Status | Body                             | Condition                       |
+| ------ | -------------------------------- | ------------------------------- |
+| 200    | Updated session object           | Success                         |
+| 401    | `{ error: "Unauthorized" }`      | No session                      |
+| 403    | `{ error: "Forbidden" }`         | Session belongs to another user |
+| 404    | `{ error: "Session not found" }` | Invalid session ID              |
 
 **Authorization required:** Yes
 
@@ -203,13 +203,13 @@ Submits an exercise result, updates the vocabulary item's SM-2 schedule, and cre
 
 **Request body:**
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `sessionId` | String | Yes | Active session ID |
-| `score` | Number (0–10) | Yes | Score from the JSON score block |
-| `feedback` | String | Yes | Tutor feedback text |
-| `vocabItemId` | String | No | ID of the vocab item (if known) |
-| `vocabTerm` | String | No | Term text (used to find or create the item if `vocabItemId` is absent) |
+| Field         | Type          | Required | Description                                                            |
+| ------------- | ------------- | -------- | ---------------------------------------------------------------------- |
+| `sessionId`   | String        | Yes      | Active session ID                                                      |
+| `score`       | Number (0–10) | Yes      | Score from the JSON score block                                        |
+| `feedback`    | String        | Yes      | Tutor feedback text                                                    |
+| `vocabItemId` | String        | No       | ID of the vocab item (if known)                                        |
+| `vocabTerm`   | String        | No       | Term text (used to find or create the item if `vocabItemId` is absent) |
 
 **Response (200):**
 
@@ -294,13 +294,13 @@ Updates the current user's profile and marks onboarding as complete.
 
 **Request body:**
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `name` | String | No | Display name |
-| `targetLang` | String | No | Language code (e.g. `"de"`) |
-| `cefrLevel` | CefrLevel | No | Proficiency level |
-| `interests` | String[] | No | List of interest topics |
-| `isOnboarded` | Boolean | No | Set to `true` to complete onboarding |
+| Field         | Type      | Required | Description                          |
+| ------------- | --------- | -------- | ------------------------------------ |
+| `name`        | String    | No       | Display name                         |
+| `targetLang`  | String    | No       | Language code (e.g. `"de"`)          |
+| `cefrLevel`   | CefrLevel | No       | Proficiency level                    |
+| `interests`   | String[]  | No       | List of interest topics              |
+| `isOnboarded` | Boolean   | No       | Set to `true` to complete onboarding |
 
 **Response (200):** Updated user profile object (same shape as GET).
 

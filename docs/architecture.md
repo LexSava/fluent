@@ -39,6 +39,7 @@ The project follows a strict pattern: **pages fetch data, components render it**
 ### Server Components (default in App Router)
 
 Pages inside `(app)/` are Server Components. They:
+
 - Call Prisma directly to fetch data
 - Call `auth()` from `src/lib/auth.ts` to get the session
 - Pass fetched data down as props to Client Components
@@ -49,6 +50,7 @@ This keeps data fetching close to the database, avoids unnecessary API round-tri
 ### Client Components (`"use client"`)
 
 All files under `src/components/` are Client Components. They:
+
 - Carry the `"use client"` directive at the top
 - Handle interactivity: form submissions, chat streaming, chart rendering, animations
 - May use React hooks (`useState`, `useEffect`, `useRef`)
@@ -135,12 +137,14 @@ Client Component
 The application does not use a `middleware.ts` file for route protection. Instead, protection is applied at two levels:
 
 **Server Component pages** call `auth()` at the top and redirect to `/login` if no session is present:
+
 ```
 const session = await auth()
 if (!session) redirect("/login")
 ```
 
 **API route handlers** also call `auth()` and return a 401 response if unauthenticated:
+
 ```
 const session = await auth()
 if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 })

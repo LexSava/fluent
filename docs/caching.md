@@ -19,11 +19,11 @@ The Redis client is initialized in `src/lib/redis.ts` using the `UPSTASH_REDIS_R
 
 `src/lib/redis.ts` exports three helper functions:
 
-| Function | Description |
-|----------|-------------|
-| `getCached<T>(key)` | Fetch a value by key; returns `T \| null` |
-| `setCached<T>(key, value, ttlSeconds)` | Store a value with a TTL |
-| `invalidateCache(key)` | Delete a key immediately |
+| Function                               | Description                               |
+| -------------------------------------- | ----------------------------------------- |
+| `getCached<T>(key)`                    | Fetch a value by key; returns `T \| null` |
+| `setCached<T>(key, value, ttlSeconds)` | Store a value with a TTL                  |
+| `invalidateCache(key)`                 | Delete a key immediately                  |
 
 All values are stored as JSON strings and deserialized on read.
 
@@ -33,14 +33,14 @@ All values are stored as JSON strings and deserialized on read.
 
 ### Due Items Cache
 
-| Property | Value |
-|----------|-------|
-| Key pattern | `due_items:{userId}` |
-| Value | Array of `VocabItem` objects |
-| TTL | 3600 seconds (1 hour) |
-| Written | In `/api/session/start` on a cache miss |
-| Read | In `/api/session/start` (avoids DB query on repeat calls) and in `/api/chat` (provides due items to the system prompt builder) |
-| Invalidated | In `/api/session/end` (due dates change after reviews) |
+| Property    | Value                                                                                                                          |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Key pattern | `due_items:{userId}`                                                                                                           |
+| Value       | Array of `VocabItem` objects                                                                                                   |
+| TTL         | 3600 seconds (1 hour)                                                                                                          |
+| Written     | In `/api/session/start` on a cache miss                                                                                        |
+| Read        | In `/api/session/start` (avoids DB query on repeat calls) and in `/api/chat` (provides due items to the system prompt builder) |
+| Invalidated | In `/api/session/end` (due dates change after reviews)                                                                         |
 
 **Why 1 hour?** Due items change only when vocabulary reviews are submitted. Within a single session (typically 5–30 minutes), the set of due items is stable. Caching for 1 hour means a user who starts multiple sessions in the same hour pays only one database query.
 
@@ -48,14 +48,14 @@ All values are stored as JSON strings and deserialized on read.
 
 ### Progress Cache
 
-| Property | Value |
-|----------|-------|
-| Key pattern | `progress:{userId}` |
-| Value | `ProgressData` object (total words, streak, accuracy, weekly chart, vocabulary breakdown) |
-| TTL | 1800 seconds (30 minutes) |
-| Written | In `/api/progress` on a cache miss |
-| Read | In `/api/progress` (served to the progress page) |
-| Invalidated | In `/api/session/end` (session completion changes stats) |
+| Property    | Value                                                                                     |
+| ----------- | ----------------------------------------------------------------------------------------- |
+| Key pattern | `progress:{userId}`                                                                       |
+| Value       | `ProgressData` object (total words, streak, accuracy, weekly chart, vocabulary breakdown) |
+| TTL         | 1800 seconds (30 minutes)                                                                 |
+| Written     | In `/api/progress` on a cache miss                                                        |
+| Read        | In `/api/progress` (served to the progress page)                                          |
+| Invalidated | In `/api/session/end` (session completion changes stats)                                  |
 
 **Why 30 minutes?** Progress stats are aggregations over historical data. They don't change mid-session. Serving them from cache eliminates several complex Prisma aggregation queries on every page load.
 
@@ -88,11 +88,11 @@ The client-side session state is stored in the browser's `sessionStorage` (not `
 
 ### What Is Stored
 
-| Key | Type | Content | Cleared when |
-|-----|------|---------|--------------|
-| `active_session` | JSON object | `{ sessionId, format, dueItems }` | Session ends |
-| `chat_messages_{sessionId}` | JSON array | Full message history (both user and assistant) | Session ends |
-| `exercise_count_{sessionId}` | String (number) | Count of completed exercises | Session ends |
+| Key                          | Type            | Content                                        | Cleared when |
+| ---------------------------- | --------------- | ---------------------------------------------- | ------------ |
+| `active_session`             | JSON object     | `{ sessionId, format, dueItems }`              | Session ends |
+| `chat_messages_{sessionId}`  | JSON array      | Full message history (both user and assistant) | Session ends |
+| `exercise_count_{sessionId}` | String (number) | Count of completed exercises                   | Session ends |
 
 ### Why sessionStorage Instead of React State
 
@@ -102,13 +102,13 @@ React state is lost on page refresh. If a user accidentally refreshes during a s
 
 ## Difference Between Redis and sessionStorage
 
-| Property | Redis (Upstash) | sessionStorage |
-|----------|----------------|----------------|
-| Location | Server-side | Client-side (browser tab) |
-| Scope | Shared across all tabs and devices | Single browser tab only |
-| Lifetime | Controlled by TTL or explicit delete | Until tab is closed |
+| Property      | Redis (Upstash)                             | sessionStorage                        |
+| ------------- | ------------------------------------------- | ------------------------------------- |
+| Location      | Server-side                                 | Client-side (browser tab)             |
+| Scope         | Shared across all tabs and devices          | Single browser tab only               |
+| Lifetime      | Controlled by TTL or explicit delete        | Until tab is closed                   |
 | What's stored | Aggregated data (due items, progress stats) | Conversation messages, exercise count |
-| Access | Only from server-side route handlers | Only from client-side JavaScript |
+| Access        | Only from server-side route handlers        | Only from client-side JavaScript      |
 
 ---
 
