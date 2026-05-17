@@ -1,0 +1,106 @@
+'use client'
+
+import { ArrowUp } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+
+import { cn } from '@/lib/utils'
+
+const MAX_CHARS = 500
+
+type InputBarProps = {
+  onSend: (text: string) => void
+  disabled?: boolean
+  placeholder?: string
+}
+
+export function InputBar({
+  onSend,
+  disabled = false,
+  placeholder = 'Напиши свой ответ...',
+}: InputBarProps) {
+  const [value, setValue] = useState('')
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    const el = textareaRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = Math.min(el.scrollHeight, 160) + 'px'
+  }, [value])
+
+  function handleSend() {
+    const trimmed = value.trim()
+    if (!trimmed || disabled || value.length > MAX_CHARS) return
+    onSend(trimmed)
+    setValue('')
+    if (textareaRef.current) {
+      textareaRef.current.style.height = '44px'
+    }
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSend()
+    }
+  }
+
+  const charCount = value.length
+  const isOverLimit = charCount > MAX_CHARS
+  const isNearLimit = charCount > MAX_CHARS * 0.8
+  const canSend = value.trim().length > 0 && !disabled && !isOverLimit
+
+  const counterColor = isOverLimit
+    ? 'var(--error)'
+    : isNearLimit
+      ? 'var(--warning)'
+      : 'var(--text-hint)'
+
+  return (
+    <div className="border-t border-[var(--border)] bg-[var(--bg-card)] px-4 py-3">
+      <div className="flex items-end gap-2">
+        <div className="relative flex-1">
+          <textarea
+            ref={textareaRef}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={disabled}
+            placeholder={placeholder}
+            rows={1}
+            className={cn(
+              'w-full min-h-[44px] max-h-[160px] resize-none overflow-y-auto pb-5',
+              'rounded-[var(--radius-md)] border border-[var(--border)]',
+              'bg-[var(--bg-elevated)] px-3 py-2.5 text-sm leading-relaxed text-[var(--text-primary)]',
+              'placeholder:text-[var(--text-hint)] outline-none',
+              'transition-colors duration-150 focus:border-[var(--accent)]',
+              'disabled:cursor-not-allowed disabled:opacity-50',
+              isOverLimit && 'border-[var(--error)]'
+            )}
+          />
+          {/* Character counter */}
+          <span
+            className="pointer-events-none absolute bottom-2 right-3 text-[11px]"
+            style={{ color: counterColor }}
+          >
+            {charCount}/{MAX_CHARS}
+          </span>
+        </div>
+        <button
+          onClick={handleSend}
+          disabled={!canSend}
+          className={cn(
+            'flex size-9 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border',
+            'transition-colors duration-150',
+            canSend
+              ? 'border-[var(--accent)] bg-[var(--accent)] text-white'
+              : 'border-[var(--border)] bg-transparent text-[var(--text-hint)]',
+            'disabled:cursor-not-allowed'
+          )}
+        >
+          <ArrowUp size={16} />
+        </button>
+      </div>
+    </div>
+  )
+}
