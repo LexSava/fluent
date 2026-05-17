@@ -213,6 +213,25 @@ fix/short-description
 chore/short-description
 ```
 
+## Documentation
+
+Full developer documentation is in the [`docs/`](./docs/) folder.
+
+| Document | Description |
+|----------|-------------|
+| [Architecture](./docs/architecture.md) | App Router structure, folder layout, data flow, middleware |
+| [Authentication](./docs/authentication.md) | NextAuth v5, providers, session strategy, registration, password reset |
+| [Database](./docs/database.md) | Prisma models, fields, relations, client usage, DB commands |
+| [AI Integration](./docs/ai-integration.md) | Claude API, model selection, system prompt, streaming, score parsing |
+| [SRS Algorithm](./docs/srs-algorithm.md) | SM-2 implementation, formulas, grade mapping, vocabulary lifecycle |
+| [Session Flow](./docs/session-flow.md) | Complete learning session lifecycle from start to end |
+| [Caching](./docs/caching.md) | Upstash Redis, cache keys, TTLs, invalidation, rate limiting |
+| [API Routes](./docs/api-routes.md) | All endpoints with methods, parameters, response formats |
+| [Components](./docs/components.md) | All React components with props, hooks, and relationships |
+| [Design System](./docs/design-system.md) | CSS variables, typography, component rules, theme switching |
+| [Testing](./docs/testing.md) | Test setup, running tests, patterns, mocks |
+| [Deployment](./docs/deployment.md) | Vercel deployment, CI/CD pipeline, environment variables |
+
 ## License
 
 MIT
