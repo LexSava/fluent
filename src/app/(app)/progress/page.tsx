@@ -1,18 +1,197 @@
-import { BarChart2 } from 'lucide-react'
+import { BookOpen, Flame } from 'lucide-react'
+import Link from 'next/link'
+import { cookies } from 'next/headers'
 
-export default function ProgressPage() {
+import { StatCard } from '@/components/dashboard/StatCard'
+import AccuracyRing from '@/components/progress/AccuracyRing'
+import StatsChart from '@/components/progress/StatsChart'
+import StreakCalendar from '@/components/progress/StreakCalendar'
+import VocabList from '@/components/progress/VocabList'
+
+type WeeklyActivity = {
+  date: string
+  exercisesCount: number
+  score: number
+}
+
+type VocabItem = {
+  id: string
+  term: string
+  translation: string
+  repetitions: number
+  dueAt: string
+  lastScore: number | null
+}
+
+type ProgressData = {
+  totalWords: number
+  newWords: number
+  learningWords: number
+  masteredWords: number
+  dueToday: number
+  streak: number
+  accuracy: number
+  totalSessions: number
+  weeklyActivity: WeeklyActivity[]
+  recentVocab: VocabItem[]
+}
+
+async function getProgressData(): Promise<ProgressData | null> {
+  try {
+    const cookieStore = await cookies()
+    const cookieHeader = cookieStore
+      .getAll()
+      .map((c) => `${c.name}=${c.value}`)
+      .join('; ')
+
+    const baseUrl = process.env.NEXTAUTH_URL ?? 'http://localhost:3000'
+    const res = await fetch(`${baseUrl}/api/progress`, {
+      headers: { cookie: cookieHeader },
+      cache: 'no-store',
+    })
+
+    if (!res.ok) return null
+    return res.json()
+  } catch {
+    return null
+  }
+}
+
+export default async function ProgressPage() {
+  const data = await getProgressData()
+
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-3 rounded-md border border-[var(--border)] bg-[var(--bg-card)] py-20">
+        <p className="text-[14px] text-[var(--text-secondary)]">
+          Не удалось загрузить данные. Попробуйте позже.
+        </p>
+        <Link
+          href="/dashboard"
+          className="rounded-sm bg-[var(--accent)] px-4 py-2 text-[13px] font-semibold text-white"
+        >
+          На главную
+        </Link>
+      </div>
+    )
+  }
+
+  const {
+    totalWords,
+    newWords,
+    learningWords,
+    masteredWords,
+    dueToday,
+    streak,
+    accuracy,
+    totalSessions,
+    weeklyActivity,
+    recentVocab,
+  } = data
+
+  // Empty state for new users
+  if (totalWords === 0) {
+    return (
+      <div className="flex flex-col gap-6">
+        <h1 className="text-[26px] font-bold tracking-[-0.03em] text-[var(--text-primary)]">
+          Мой прогресс
+        </h1>
+        <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-[var(--border)] bg-[var(--bg-card)] py-20">
+          <div className="flex h-16 w-16 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--bg-elevated)]">
+            <BookOpen size={32} className="text-[var(--accent)]" />
+          </div>
+          <div className="text-center">
+            <p className="text-[18px] font-semibold text-[var(--text-primary)]">
+              Начни своё первое занятие
+            </p>
+            <p className="mt-1 max-w-xs text-[14px] text-[var(--text-secondary)]">
+              Здесь будет появляться твой прогресс, статистика сессий и изученные слова.
+            </p>
+          </div>
+          <Link
+            href="/dashboard"
+            className="rounded-sm bg-[var(--accent)] px-5 py-2.5 text-[13px] font-semibold text-white"
+          >
+            Начать занятие
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-6">
+      {/* Header */}
       <h1 className="text-[26px] font-bold tracking-[-0.03em] text-[var(--text-primary)]">
-        Прогресс
+        Мой прогресс
       </h1>
 
-      <div className="flex flex-col items-center justify-center gap-3 rounded-md border border-[var(--border)] bg-[var(--bg-card)] py-16">
-        <BarChart2 size={32} className="text-[var(--text-hint)]" />
-        <p className="text-sm text-[var(--text-secondary)]">
-          Статистика появится после первой сессии
-        </p>
+      {/* Row 1: main stats */}
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <StatCard label="Слов изучено" value={totalWords} color="accent" />
+        <StatCard label="Выучено" value={masteredWords} color="success" />
+        <StatCard label="Учится" value={learningWords} color="warning" />
+        <StatCard
+          label="Повторить сегодня"
+          value={dueToday}
+          color={dueToday > 0 ? 'primary' : 'primary'}
+          hint={dueToday > 0 ? 'Есть задания' : 'Всё готово'}
+        />
       </div>
+
+      {/* Row 2: ring + secondary stats */}
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {/* AccuracyRing spans 1 cell, centered */}
+        <div className="flex items-center justify-center rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
+          <AccuracyRing value={accuracy} />
+        </div>
+
+        {/* Streak card with flame icon */}
+        <div className="flex flex-col gap-1 rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--text-hint)]">
+            Серия дней
+          </p>
+          <div className="flex items-center gap-1">
+            <Flame size={20} className="text-[var(--warning)]" />
+            <span className="text-[28px] font-bold leading-none text-[var(--warning)]">
+              {streak}
+            </span>
+          </div>
+          <p className="text-[11px] text-[var(--text-hint)]">
+            {streak === 1 ? 'день подряд' : streak < 5 ? 'дня подряд' : 'дней подряд'}
+          </p>
+        </div>
+
+        <StatCard label="Всего сессий" value={totalSessions} color="accent" />
+        <StatCard label="Новых слов" value={newWords} color="primary" />
+      </div>
+
+      {/* Weekly activity */}
+      <section className="rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
+        <h2 className="mb-4 text-[18px] font-semibold text-[var(--text-primary)]">
+          Активность за неделю
+        </h2>
+        <StatsChart data={weeklyActivity} />
+      </section>
+
+      {/* Streak calendar */}
+      <section className="rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
+        <h2 className="mb-4 text-[18px] font-semibold text-[var(--text-primary)]">
+          История занятий
+        </h2>
+        <StreakCalendar weeklyActivity={weeklyActivity} />
+      </section>
+
+      {/* Vocab list */}
+      <section className="rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
+        <div className="mb-4 flex items-center gap-2">
+          <h2 className="text-[18px] font-semibold text-[var(--text-primary)]">Мой словарь</h2>
+          <span className="rounded-xs border border-[var(--border)] bg-[var(--bg-elevated)] px-2 py-0.5 text-[11px] font-semibold text-[var(--text-hint)]">
+            {totalWords} слов
+          </span>
+        </div>
+        <VocabList items={recentVocab} />
+      </section>
     </div>
   )
 }

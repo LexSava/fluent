@@ -6,6 +6,7 @@ import { invalidateCache } from '@/lib/redis'
 import type { Exercise } from '@/types/session'
 
 const dueItemsKey = (userId: string) => `due_items:${userId}`
+const progressKey = (userId: string) => `progress:${userId}`
 
 export async function POST(req: Request) {
   const session = await auth()
@@ -35,7 +36,7 @@ export async function POST(req: Request) {
     },
   })
 
-  await invalidateCache(dueItemsKey(userId))
+  await Promise.all([invalidateCache(dueItemsKey(userId)), invalidateCache(progressKey(userId))])
 
   return NextResponse.json(updated)
 }
