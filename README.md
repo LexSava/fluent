@@ -4,7 +4,7 @@ Fluent is a web application that helps users learn foreign languages through AI-
 
 ## Live Demo
 
-_URL will be added after deployment._
+https://fluent-ai-web.vercel.app
 
 ## Features
 
@@ -143,7 +143,7 @@ src/
     progress/             # Accuracy ring, stats chart, streak calendar, vocab list
     session/              # Chat window, message bubbles, input bar, answer options
     ui/                   # Shared primitives (Avatar, etc.)
-  hooks/                  # useProgress, useSession, useTheme, useTypewriter
+  hooks/                  # useTypewriter
   lib/                    # Server-side utilities
     ai.ts                 # System prompt builder
     auth.ts               # NextAuth configuration and session helpers
