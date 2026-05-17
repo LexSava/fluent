@@ -67,6 +67,7 @@ export function InputBar({
             onKeyDown={handleKeyDown}
             disabled={disabled}
             placeholder={placeholder}
+            aria-label="Введите сообщение"
             rows={1}
             className={cn(
               'w-full min-h-[44px] max-h-[160px] resize-none overflow-y-auto pb-5',
@@ -89,16 +90,18 @@ export function InputBar({
         <button
           onClick={handleSend}
           disabled={!canSend}
+          aria-label="Отправить сообщение"
           className={cn(
             'flex size-9 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border',
             'transition-colors duration-150',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-1',
             canSend
               ? 'border-[var(--accent)] bg-[var(--accent)] text-white'
               : 'border-[var(--border)] bg-transparent text-[var(--text-hint)]',
             'disabled:cursor-not-allowed'
           )}
         >
-          <ArrowUp size={16} />
+          <ArrowUp size={16} aria-hidden="true" />
         </button>
       </div>
     </div>

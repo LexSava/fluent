@@ -102,6 +102,7 @@ export function RegisterForm() {
           label="Имя"
           type="text"
           placeholder="Иван"
+          autoComplete="name"
           error={errors.name?.message}
           required
           {...register('name')}
@@ -111,6 +112,8 @@ export function RegisterForm() {
           label="Email"
           type="email"
           placeholder="you@example.com"
+          autoComplete="email"
+          spellCheck={false}
           error={errors.email?.message}
           required
           {...register('email')}
@@ -122,6 +125,7 @@ export function RegisterForm() {
               label="Пароль"
               type={showPassword ? 'text' : 'password'}
               placeholder="Придумайте пароль"
+              autoComplete="new-password"
               error={errors.password?.message}
               className="pr-10"
               required
@@ -130,9 +134,14 @@ export function RegisterForm() {
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
               className="absolute right-3 top-[30px] text-[var(--text-hint)] hover:text-[var(--text-secondary)]"
             >
-              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              {showPassword ? (
+                <EyeOff size={16} aria-hidden="true" />
+              ) : (
+                <Eye size={16} aria-hidden="true" />
+              )}
             </button>
           </div>
           <PasswordStrengthIndicator password={passwordValue} />
@@ -143,6 +152,7 @@ export function RegisterForm() {
             label="Подтвердите пароль"
             type={showConfirm ? 'text' : 'password'}
             placeholder="Повторите пароль"
+            autoComplete="new-password"
             error={errors.confirmPassword?.message}
             className="pr-10"
             required
@@ -151,9 +161,16 @@ export function RegisterForm() {
           <button
             type="button"
             onClick={() => setShowConfirm((v) => !v)}
+            aria-label={
+              showConfirm ? 'Скрыть подтверждение пароля' : 'Показать подтверждение пароля'
+            }
             className="absolute right-3 top-[30px] text-[var(--text-hint)] hover:text-[var(--text-secondary)]"
           >
-            {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+            {showConfirm ? (
+              <EyeOff size={16} aria-hidden="true" />
+            ) : (
+              <Eye size={16} aria-hidden="true" />
+            )}
           </button>
         </div>
 

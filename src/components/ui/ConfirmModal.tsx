@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { AlertTriangle, LogOut } from 'lucide-react'
+import { useEffect, useId, useRef } from 'react'
 
 import { cn } from '@/lib/utils'
 import { Button } from './Button'
@@ -27,6 +28,21 @@ export function ConfirmModal({
   cancelText,
   variant,
 }: ConfirmModalProps) {
+  const titleId = useId()
+  const descId = useId()
+  const confirmRef = useRef<HTMLButtonElement>(null)
+  const cancelRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!isOpen) return
+    cancelRef.current?.focus()
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onCancel()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onCancel])
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -39,6 +55,10 @@ export function ConfirmModal({
           className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 p-4 backdrop-blur-[4px]"
         >
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
+            aria-describedby={descId}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -48,27 +68,40 @@ export function ConfirmModal({
           >
             <div className="flex flex-col items-center">
               {variant === 'danger' ? (
-                <AlertTriangle size={32} className="text-[var(--error)]" />
+                <AlertTriangle size={32} className="text-[var(--error)]" aria-hidden="true" />
               ) : (
-                <LogOut size={32} className="text-[var(--warning)]" />
+                <LogOut size={32} className="text-[var(--warning)]" aria-hidden="true" />
               )}
 
-              <p className="mt-3 text-center text-[18px] font-semibold text-[var(--text-primary)]">
+              <p
+                id={titleId}
+                className="mt-3 text-center text-[18px] font-semibold text-[var(--text-primary)]"
+              >
                 {title}
               </p>
 
-              <p className="mt-2 text-center text-sm text-[var(--text-secondary)]">{description}</p>
+              <p id={descId} className="mt-2 text-center text-sm text-[var(--text-secondary)]">
+                {description}
+              </p>
 
               <div className="mt-6 flex w-full gap-3">
-                <Button variant="secondary" size="md" className="flex-1" onClick={onCancel}>
+                <Button
+                  ref={cancelRef}
+                  variant="secondary"
+                  size="md"
+                  className="flex-1"
+                  onClick={onCancel}
+                >
                   {cancelText}
                 </Button>
 
                 <button
+                  ref={confirmRef}
                   onClick={onConfirm}
                   className={cn(
                     'flex-1 rounded-[var(--radius-sm)] border-none py-2 text-sm font-semibold',
                     'cursor-pointer transition-opacity duration-150 hover:opacity-85',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-1',
                     variant === 'danger'
                       ? 'bg-[var(--error)] text-white'
                       : 'bg-[var(--warning)] text-[#1a1a1a]'

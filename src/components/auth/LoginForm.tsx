@@ -90,6 +90,8 @@ export function LoginForm() {
           label="Email"
           type="email"
           placeholder="you@example.com"
+          autoComplete="email"
+          spellCheck={false}
           error={errors.email?.message}
           {...register('email')}
         />
@@ -100,6 +102,7 @@ export function LoginForm() {
               label="Пароль"
               type={showPassword ? 'text' : 'password'}
               placeholder="Введите пароль"
+              autoComplete="current-password"
               error={errors.password?.message}
               className="pr-10"
               {...register('password')}
@@ -107,9 +110,14 @@ export function LoginForm() {
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
               className="absolute right-3 top-[30px] text-[var(--text-hint)] hover:text-[var(--text-secondary)]"
             >
-              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              {showPassword ? (
+                <EyeOff size={16} aria-hidden="true" />
+              ) : (
+                <Eye size={16} aria-hidden="true" />
+              )}
             </button>
           </div>
           <div className="flex justify-end">

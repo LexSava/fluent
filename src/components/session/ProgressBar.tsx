@@ -15,7 +15,14 @@ export function ProgressBar({ current, total }: ProgressBarProps) {
       <p className="text-[11px] text-[var(--text-hint)]">
         Упражнение {current} из {total}
       </p>
-      <div className="relative h-1 w-full overflow-hidden rounded-full bg-[var(--bg-elevated)]">
+      <div
+        role="progressbar"
+        aria-valuenow={current}
+        aria-valuemin={0}
+        aria-valuemax={total}
+        aria-label={`Упражнение ${current} из ${total}`}
+        className="relative h-1 w-full overflow-hidden rounded-full bg-[var(--bg-elevated)]"
+      >
         <motion.div
           className="absolute inset-y-0 left-0 rounded-full bg-[var(--accent)]"
           animate={{ width: `${pct}%` }}

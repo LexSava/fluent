@@ -58,14 +58,15 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
         </span>
         <button
           onClick={onClose}
+          aria-label="Закрыть меню"
           className="flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-[var(--text-hint)] hover:text-[var(--text-primary)] md:hidden"
         >
-          <X size={16} />
+          <X size={16} aria-hidden="true" />
         </button>
       </div>
 
       {/* Nav */}
-      <nav className="flex flex-1 flex-col gap-0.5 p-2">
+      <nav aria-label="Основная навигация" className="flex flex-1 flex-col gap-0.5 p-2">
         {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
           const isSession = href === '/session'
           const active = pathname.startsWith(href)
@@ -100,6 +101,8 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
                 ) : (
                   <button
                     onClick={() => setShowPopover((p) => !p)}
+                    aria-haspopup="true"
+                    aria-expanded={showPopover}
                     className={cn(
                       'flex w-full items-center gap-3 rounded-[var(--radius-sm)] px-3 py-2 text-sm transition-colors duration-150',
                       active
@@ -165,10 +168,10 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
           </div>
           <button
             onClick={() => signOut({ callbackUrl: '/login' })}
-            title="Sign out"
+            aria-label="Выйти из аккаунта"
             className="flex size-7 shrink-0 items-center justify-center rounded-[var(--radius-sm)] text-[var(--text-hint)] transition-colors hover:bg-[var(--bg-elevated)] hover:text-[var(--error)]"
           >
-            <LogOut size={14} />
+            <LogOut size={14} aria-hidden="true" />
           </button>
         </div>
       </div>

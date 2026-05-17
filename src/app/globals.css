@@ -54,6 +54,10 @@
   --accent-dim: #1a1825;
 }
 
+:root {
+  color-scheme: light dark;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -63,4 +67,27 @@ body {
   color: var(--text-primary);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  touch-action: manipulation;
+}
+
+button,
+a,
+[role='button'] {
+  touch-action: manipulation;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
