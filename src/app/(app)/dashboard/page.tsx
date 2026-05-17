@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { ActiveSessionBanner } from '@/components/dashboard/ActiveSessionBanner'
 import { SessionPicker } from '@/components/dashboard/SessionPicker'
 import { StatCard } from '@/components/dashboard/StatCard'
 import { StreakBadge } from '@/components/dashboard/StreakBadge'
@@ -74,6 +75,9 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
+      {/* Active session banner (client component — reads sessionStorage) */}
+      <ActiveSessionBanner />
+
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>

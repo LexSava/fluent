@@ -61,7 +61,7 @@ export async function POST(req: Request) {
   const systemPrompt = buildSystemPrompt(user, dueItems, sessionFormat)
 
   const model = COMPLEX_FORMATS.includes(sessionFormat)
-    ? anthropic('claude-sonnet-4-5-20251001')
+    ? anthropic('claude-sonnet-4-6')
     : anthropic('claude-haiku-4-5-20251001')
 
   const result = streamText({

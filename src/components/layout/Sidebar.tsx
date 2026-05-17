@@ -3,8 +3,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { BarChart2, LayoutDashboard, LogOut, MessageCircle, Settings, X } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 
 import { Avatar } from '@/components/ui/Avatar'
 import { cn } from '@/lib/utils'
@@ -31,6 +32,26 @@ type SidebarProps = {
 
 export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
   const pathname = usePathname()
+  const router = useRouter()
+  const [activeSessionUrl, setActiveSessionUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      try {
+        setActiveSessionUrl(sessionStorage.getItem('active_session_url'))
+      } catch {}
+    })
+  }, [pathname])
+
+  function handleSessionClick(e: React.MouseEvent) {
+    e.preventDefault()
+    onClose()
+    if (activeSessionUrl) {
+      router.push(activeSessionUrl)
+    } else {
+      router.push('/dashboard')
+    }
+  }
 
   const content = (
     <div className="flex h-full w-56 flex-col border-r border-[var(--border)] bg-[var(--bg-card)]">
@@ -51,19 +72,29 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
       {/* Nav */}
       <nav className="flex flex-1 flex-col gap-0.5 p-2">
         {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
+          const isSession = href === '/session'
           const active = pathname.startsWith(href)
+          const itemClass = cn(
+            'flex items-center gap-3 rounded-[var(--radius-sm)] px-3 py-2 text-sm transition-colors duration-150',
+            active
+              ? 'bg-[var(--accent-dim)] font-medium text-[var(--accent)]'
+              : 'text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]'
+          )
+
+          if (isSession) {
+            return (
+              <a key={href} href={href} onClick={handleSessionClick} className={itemClass}>
+                <Icon size={16} className="shrink-0" />
+                {label}
+                {activeSessionUrl && (
+                  <span className="ml-auto size-2 shrink-0 rounded-full bg-[var(--success)]" />
+                )}
+              </a>
+            )
+          }
+
           return (
-            <Link
-              key={href}
-              href={href}
-              onClick={onClose}
-              className={cn(
-                'flex items-center gap-3 rounded-[var(--radius-sm)] px-3 py-2 text-sm transition-colors duration-150',
-                active
-                  ? 'bg-[var(--accent-dim)] font-medium text-[var(--accent)]'
-                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]'
-              )}
-            >
+            <Link key={href} href={href} onClick={onClose} className={itemClass}>
               <Icon size={16} className="shrink-0" />
               {label}
             </Link>

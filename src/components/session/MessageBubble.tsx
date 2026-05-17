@@ -15,6 +15,17 @@ type ScoreBlock = {
 
 const JSON_FENCE_RE = /```json\s*([\s\S]*?)\s*```/
 
+function cleanStreamingContent(content: string, isStreaming: boolean): string {
+  if (!isStreaming) return content
+  // Hide incomplete JSON code fence while streaming
+  const fenceStart = content.indexOf('```json')
+  if (fenceStart !== -1) return content.substring(0, fenceStart).trim()
+  // Fallback: hide raw JSON object in case the model skips the fence
+  const jsonStart = content.indexOf('{"score"')
+  if (jsonStart !== -1) return content.substring(0, jsonStart).trim()
+  return content
+}
+
 function parseScore(content: string): { text: string; score: ScoreBlock | null } {
   const match = content.match(JSON_FENCE_RE)
   if (!match) return { text: content, score: null }
@@ -56,7 +67,7 @@ export function MessageBubble({
   const isUser = message.role === 'user'
   const { text, score } = isUser
     ? { text: message.content, score: null }
-    : parseScore(message.content)
+    : parseScore(cleanStreamingContent(message.content, isStreaming))
 
   return (
     <motion.div

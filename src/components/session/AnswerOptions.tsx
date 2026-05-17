@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 
+import { cn } from '@/lib/utils'
 import { MarkdownContent } from './MarkdownContent'
 
 type Props = {
@@ -9,7 +10,7 @@ type Props = {
   onSelect: (option: string) => void
 }
 
-const OPTION_RE = /^[-*]?\s*([A-D])\)\s*(.+)$/gm
+const OPTION_RE = /^[\-\*]?\s*\*{0,2}([A-D])[).]\*{0,2}\s+(.+)$/gm
 
 type Parsed = { intro: string; options: string[] }
 
@@ -51,29 +52,15 @@ export function AnswerOptions({ content, onSelect }: Props) {
               key={option}
               onClick={() => handleClick(option)}
               disabled={selected !== null}
-              className="w-full rounded-[var(--radius-md)] border px-3 py-2 text-left text-sm transition-colors duration-150 disabled:cursor-default"
-              style={{
-                background: isSelected ? 'var(--accent)' : 'var(--bg-elevated)',
-                borderColor: isSelected
-                  ? 'var(--accent)'
+              className={cn(
+                'w-full rounded-[var(--radius-md)] border px-3 py-2 text-left text-sm',
+                'transition-colors duration-150 disabled:cursor-default',
+                isSelected
+                  ? 'border-[var(--accent)] bg-[var(--accent)] text-white'
                   : isDimmed
-                    ? 'var(--border)'
-                    : 'var(--border)',
-                color: isSelected ? '#fff' : isDimmed ? 'var(--text-hint)' : 'var(--text-primary)',
-                opacity: isDimmed ? 0.5 : 1,
-              }}
-              onMouseEnter={(e) => {
-                if (selected !== null) return
-                const el = e.currentTarget
-                el.style.background = 'var(--accent-dim)'
-                el.style.borderColor = 'var(--accent)'
-              }}
-              onMouseLeave={(e) => {
-                if (selected !== null) return
-                const el = e.currentTarget
-                el.style.background = 'var(--bg-elevated)'
-                el.style.borderColor = 'var(--border)'
-              }}
+                    ? 'border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text-hint)] opacity-50'
+                    : 'border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--accent-dim)]'
+              )}
             >
               {option}
             </button>

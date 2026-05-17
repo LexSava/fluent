@@ -46,30 +46,88 @@ function extractStreamText(raw: string): string {
   return raw
 }
 
+function loadStoredMessages(sessionId: string): LocalMessage[] {
+  try {
+    const raw = sessionStorage.getItem(`chat_messages_${sessionId}`)
+    if (!raw) return []
+    const parsed = JSON.parse(raw) as Array<ChatMessage & { createdAt: string }>
+    return parsed.map((m) => ({ ...m, createdAt: new Date(m.createdAt) }))
+  } catch {
+    return []
+  }
+}
+
+function loadStoredExerciseCount(sessionId: string): number {
+  try {
+    const raw = sessionStorage.getItem(`exercise_count_${sessionId}`)
+    return raw ? parseInt(raw, 10) : 0
+  } catch {
+    return 0
+  }
+}
+
+export function clearSessionStorage(sessionId: string) {
+  sessionStorage.removeItem(`chat_messages_${sessionId}`)
+  sessionStorage.removeItem(`exercise_count_${sessionId}`)
+  sessionStorage.removeItem('active_session_id')
+  sessionStorage.removeItem('active_session_format')
+  sessionStorage.removeItem('active_session_url')
+}
+
 export function ChatWindow({
   sessionId,
   sessionFormat,
   onComplete,
   onExerciseDone,
 }: ChatWindowProps) {
-  const [messages, setMessages] = useState<LocalMessage[]>([])
+  const [messages, setMessages] = useState<LocalMessage[]>(() => loadStoredMessages(sessionId))
   const [isLoading, setIsLoading] = useState(false)
   const [streamingId, setStreamingId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [exerciseCount, setExerciseCount] = useState(0)
+  const [exerciseCount, setExerciseCount] = useState<number>(() =>
+    loadStoredExerciseCount(sessionId)
+  )
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const initSentRef = useRef(false)
   const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    requestAnimationFrame(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    })
+  }, [messages, isLoading])
 
   useEffect(() => {
+    try {
+      sessionStorage.setItem(`chat_messages_${sessionId}`, JSON.stringify(messages))
+    } catch {}
+  }, [messages, sessionId])
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(`exercise_count_${sessionId}`, String(exerciseCount))
+    } catch {}
+  }, [exerciseCount, sessionId])
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem('active_session_id', sessionId)
+      sessionStorage.setItem('active_session_format', sessionFormat)
+      sessionStorage.setItem(
+        'active_session_url',
+        `/session?sessionId=${sessionId}&format=${sessionFormat}`
+      )
+    } catch {}
+  }, [sessionId, sessionFormat])
+
+  useEffect(() => {
+    const stored = loadStoredMessages(sessionId)
     if (!initSentRef.current) {
       initSentRef.current = true
-      void sendMessage(INIT_TEXT, [])
+      if (stored.length === 0) {
+        void sendMessage(INIT_TEXT, [])
+      }
     }
     return () => {
       if (errorTimerRef.current) clearTimeout(errorTimerRef.current)
@@ -181,7 +239,7 @@ export function ChatWindow({
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col">
       {/* Messages */}
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+      <div className="min-h-0 flex-1 overflow-y-auto scroll-smooth px-4 pb-5 pt-4">
         <div className="mx-auto flex max-w-2xl flex-col">
           {/* Empty state while waiting for first message */}
           {isInitialLoading && (
@@ -258,7 +316,7 @@ export function ChatWindow({
             </div>
           )}
 
-          <div ref={messagesEndRef} />
+          <div ref={messagesEndRef} className="h-5 shrink-0" />
         </div>
       </div>
 

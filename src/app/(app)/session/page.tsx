@@ -3,11 +3,12 @@
 import { ArrowLeft, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 
-import { ChatWindow } from '@/components/session/ChatWindow'
+import { ChatWindow, clearSessionStorage } from '@/components/session/ChatWindow'
 import { ProgressBar } from '@/components/session/ProgressBar'
 import { Button } from '@/components/ui/Button'
+import { ConfirmModal } from '@/components/ui/ConfirmModal'
 import { SESSION_FORMATS, SessionFormat } from '@/types/session'
 import type { Exercise } from '@/types/session'
 
@@ -27,7 +28,21 @@ function SessionContent() {
   const [exerciseScores, setExerciseScores] = useState<number[]>([])
   const [isCompleting, setIsCompleting] = useState(false)
   const [endError, setEndError] = useState<string | null>(null)
+  const [showExitModal, setShowExitModal] = useState(false)
+  const [showFinishModal, setShowFinishModal] = useState(false)
   const endErrorTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Redirect to saved session if URL has no sessionId
+  useEffect(() => {
+    if (!sessionId) {
+      try {
+        const savedUrl = sessionStorage.getItem('active_session_url')
+        if (savedUrl) {
+          router.replace(savedUrl)
+        }
+      } catch {}
+    }
+  }, [sessionId, router])
 
   const exerciseCount = exerciseScores.length
   const formatInfo = SESSION_FORMATS[sessionFormat]
@@ -36,10 +51,11 @@ function SessionContent() {
     setExerciseScores((prev) => [...prev, score])
   }
 
-  async function handleComplete() {
+  async function doComplete() {
     if (isCompleting) return
     setIsCompleting(true)
     setEndError(null)
+    setShowFinishModal(false)
 
     const exercises: Pick<
       Exercise,
@@ -71,6 +87,7 @@ function SessionContent() {
         body: JSON.stringify({ sessionId, exercises }),
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      clearSessionStorage(sessionId)
       router.push('/dashboard')
     } catch (err) {
       console.error('Session end error:', err)
@@ -81,10 +98,17 @@ function SessionContent() {
     }
   }
 
+  function handleComplete() {
+    setShowFinishModal(true)
+  }
+
   function handleExit() {
-    if (confirm('Прогресс этой сессии не сохранится. Выйти?')) {
-      router.push('/dashboard')
-    }
+    setShowExitModal(true)
+  }
+
+  function confirmExit() {
+    clearSessionStorage(sessionId)
+    router.push('/dashboard')
   }
 
   // ── No sessionId: placeholder ─────────────────────────────────────────────
@@ -123,7 +147,7 @@ function SessionContent() {
         <Button
           variant="ghost"
           size="sm"
-          disabled={exerciseCount === 0 || isCompleting}
+          disabled={isCompleting}
           loading={isCompleting}
           onClick={handleComplete}
         >
@@ -148,10 +172,34 @@ function SessionContent() {
         <ChatWindow
           sessionId={sessionId}
           sessionFormat={sessionFormat}
-          onComplete={handleComplete}
+          onComplete={doComplete}
           onExerciseDone={handleExerciseDone}
         />
       </div>
+
+      {/* Exit confirmation modal */}
+      <ConfirmModal
+        isOpen={showExitModal}
+        title="Выйти из сессии?"
+        description="Прогресс текущей сессии не будет сохранён. Ты уверен?"
+        confirmText="Выйти"
+        cancelText="Остаться"
+        variant="warning"
+        onCancel={() => setShowExitModal(false)}
+        onConfirm={confirmExit}
+      />
+
+      {/* Finish confirmation modal */}
+      <ConfirmModal
+        isOpen={showFinishModal}
+        title="Завершить сессию?"
+        description="Результаты будут сохранены и ты увидишь статистику."
+        confirmText="Завершить"
+        cancelText="Продолжить"
+        variant="danger"
+        onCancel={() => setShowFinishModal(false)}
+        onConfirm={() => void doComplete()}
+      />
     </div>
   )
 }
