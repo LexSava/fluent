@@ -1,11 +1,14 @@
 'use client'
 
+import { memo } from 'react'
 import { motion } from 'framer-motion'
+import { Streamdown } from 'streamdown'
 
+import { useTypewriter } from '@/hooks/useTypewriter'
 import { cn } from '@/lib/utils'
 import type { ChatMessage } from '@/types/session'
 import { AnswerOptions } from './AnswerOptions'
-import { MarkdownContent } from './MarkdownContent'
+import { mdComponents } from './mdComponents'
 
 type ScoreBlock = {
   score: number
@@ -15,12 +18,11 @@ type ScoreBlock = {
 
 const JSON_FENCE_RE = /```json\s*([\s\S]*?)\s*```/
 
-function cleanStreamingContent(content: string, isStreaming: boolean): string {
-  if (!isStreaming) return content
-  // Hide incomplete JSON code fence while streaming
+// Always strip the JSON block from text used for animation so it's never visible
+// while typing — even during the post-streaming typewriter catch-up phase.
+function stripJsonBlock(content: string): string {
   const fenceStart = content.indexOf('```json')
   if (fenceStart !== -1) return content.substring(0, fenceStart).trim()
-  // Fallback: hide raw JSON object in case the model skips the fence
   const jsonStart = content.indexOf('{"score"')
   if (jsonStart !== -1) return content.substring(0, jsonStart).trim()
   return content
@@ -56,7 +58,7 @@ type MessageBubbleProps = {
   onOptionSelect?: (option: string) => void
 }
 
-export function MessageBubble({
+export const MessageBubble = memo(function MessageBubble({
   message,
   isStreaming = false,
   isFirstInGroup = true,
@@ -65,9 +67,24 @@ export function MessageBubble({
   onOptionSelect,
 }: MessageBubbleProps) {
   const isUser = message.role === 'user'
-  const { text, score } = isUser
-    ? { text: message.content, score: null }
-    : parseScore(cleanStreamingContent(message.content, isStreaming))
+
+  // Typewriter target: always strip JSON so it's never animated onto screen
+  const targetText = isUser ? message.content : stripJsonBlock(message.content)
+
+  // Typewriter: animate displayed chars from '' → full text
+  const displayed = useTypewriter(targetText, isStreaming)
+
+  // isStillAnimating: typewriter hasn't caught up yet
+  const isStillAnimating = displayed.length < targetText.length
+
+  // For finished assistant messages: parse score block
+  const { text: finalText, score } =
+    !isUser && !isStreaming && !isStillAnimating
+      ? parseScore(message.content)
+      : { text: displayed, score: null }
+
+  // Show interactive options only once animation is fully done
+  const showOptions = !isUser && !isStreaming && !isStillAnimating && !!onOptionSelect
 
   return (
     <motion.div
@@ -96,31 +113,21 @@ export function MessageBubble({
           )}
         >
           {isUser ? (
-            <span className="whitespace-pre-wrap">{text || ' '}</span>
+            <span className="whitespace-pre-wrap">{message.content || ' '}</span>
+          ) : showOptions ? (
+            <AnswerOptions content={finalText} onSelect={onOptionSelect!} />
+          ) : displayed ? (
+            <Streamdown
+              isAnimating={isStreaming || isStillAnimating}
+              caret="circle"
+              controls={false}
+              linkSafety={{ enabled: false }}
+              components={mdComponents}
+            >
+              {displayed}
+            </Streamdown>
           ) : (
-            <>
-              {text ? (
-                onOptionSelect ? (
-                  <AnswerOptions content={text} onSelect={onOptionSelect} />
-                ) : (
-                  <MarkdownContent content={text} />
-                )
-              ) : (
-                <span> </span>
-              )}
-              {isStreaming && (
-                <span className="ml-1 inline-flex items-center gap-0.5">
-                  {[0, 1, 2].map((i) => (
-                    <motion.span
-                      key={i}
-                      className="inline-block size-1 rounded-full bg-current opacity-60"
-                      animate={{ opacity: [0.3, 1, 0.3] }}
-                      transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
-                    />
-                  ))}
-                </span>
-              )}
-            </>
+            <span> </span>
           )}
         </div>
 
@@ -150,4 +157,4 @@ export function MessageBubble({
       </div>
     </motion.div>
   )
-}
+})

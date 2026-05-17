@@ -88,15 +88,31 @@ export function ChatWindow({
     loadStoredExerciseCount(sessionId)
   )
 
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
   const initSentRef = useRef(false)
   const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  // Scroll to bottom whenever content height grows (new messages or typewriter animation).
+  // ResizeObserver fires after layout, so the DOM is always fully measured.
+  // Only auto-scrolls when user is already near the bottom (< 200px away),
+  // so manual scroll-up is preserved.
   useEffect(() => {
-    requestAnimationFrame(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-    })
-  }, [messages, isLoading])
+    const container = scrollContainerRef.current
+    const inner = messagesContainerRef.current
+    if (!container || !inner) return
+
+    const scrollToBottom = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container
+      if (scrollHeight - scrollTop - clientHeight < 200) {
+        container.scrollTop = scrollHeight
+      }
+    }
+
+    const observer = new ResizeObserver(scrollToBottom)
+    observer.observe(inner)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     try {
@@ -239,8 +255,8 @@ export function ChatWindow({
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col">
       {/* Messages */}
-      <div className="min-h-0 flex-1 overflow-y-auto scroll-smooth px-4 pb-5 pt-4">
-        <div className="mx-auto flex max-w-2xl flex-col">
+      <div ref={scrollContainerRef} className="min-h-0 flex-1 overflow-y-auto px-4 pb-5 pt-4">
+        <div ref={messagesContainerRef} className="mx-auto flex max-w-2xl flex-col">
           {/* Empty state while waiting for first message */}
           {isInitialLoading && (
             <div className="flex flex-col items-center justify-center gap-4 py-16">
@@ -316,7 +332,7 @@ export function ChatWindow({
             </div>
           )}
 
-          <div ref={messagesEndRef} className="h-5 shrink-0" />
+          <div className="h-5 shrink-0" />
         </div>
       </div>
 
