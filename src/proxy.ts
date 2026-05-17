@@ -17,13 +17,16 @@ export default auth((req) => {
     return NextResponse.redirect(new URL('/login', req.url))
   }
 
-  if (isAuthenticated && (pathname === '/login' || pathname === '/register')) {
-    return NextResponse.redirect(new URL('/dashboard', req.url))
+  if (isAuthenticated && isPublicRoute) {
+    const isOnboarded = (req.auth?.user as { isOnboarded?: boolean })?.isOnboarded
+    return NextResponse.redirect(new URL(isOnboarded ? '/dashboard' : '/onboarding', req.url))
   }
 
   return NextResponse.next()
 })
 
 export const config = {
-  matcher: ['/((?!api/auth|_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    '/((?!api/auth|_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
 }
