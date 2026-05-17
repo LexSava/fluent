@@ -133,6 +133,7 @@ export default function OnboardingPage() {
                     key={value}
                     type="button"
                     onClick={() => setCefrLevel(value)}
+                    aria-pressed={cefrLevel === value}
                     className={cn(
                       'flex flex-col items-center rounded-md border px-3 py-4 transition-colors duration-150',
                       cefrLevel === value
@@ -177,6 +178,7 @@ export default function OnboardingPage() {
                     key={item}
                     type="button"
                     onClick={() => toggleInterest(item)}
+                    aria-pressed={interests.includes(item)}
                     className={cn(
                       'rounded-xs border px-3 py-1.5 text-sm font-medium transition-colors duration-150',
                       interests.includes(item)

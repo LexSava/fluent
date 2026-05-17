@@ -59,6 +59,7 @@ export function ResetPasswordForm({ token }: Props) {
               label="Новый пароль"
               type={showPassword ? 'text' : 'password'}
               placeholder="Новый пароль"
+              autoComplete="new-password"
               error={errors.password?.message}
               className="pr-10"
               required
@@ -67,9 +68,14 @@ export function ResetPasswordForm({ token }: Props) {
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
               className="absolute right-3 top-[30px] text-[var(--text-hint)] hover:text-[var(--text-secondary)]"
             >
-              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              {showPassword ? (
+                <EyeOff size={16} aria-hidden="true" />
+              ) : (
+                <Eye size={16} aria-hidden="true" />
+              )}
             </button>
           </div>
           <PasswordStrengthIndicator password={passwordValue} />
@@ -80,6 +86,7 @@ export function ResetPasswordForm({ token }: Props) {
             label="Подтвердите пароль"
             type={showConfirm ? 'text' : 'password'}
             placeholder="Повторите пароль"
+            autoComplete="new-password"
             error={errors.confirmPassword?.message}
             className="pr-10"
             required
@@ -88,9 +95,16 @@ export function ResetPasswordForm({ token }: Props) {
           <button
             type="button"
             onClick={() => setShowConfirm((v) => !v)}
+            aria-label={
+              showConfirm ? 'Скрыть подтверждение пароля' : 'Показать подтверждение пароля'
+            }
             className="absolute right-3 top-[30px] text-[var(--text-hint)] hover:text-[var(--text-secondary)]"
           >
-            {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+            {showConfirm ? (
+              <EyeOff size={16} aria-hidden="true" />
+            ) : (
+              <Eye size={16} aria-hidden="true" />
+            )}
           </button>
         </div>
 

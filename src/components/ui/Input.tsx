@@ -32,7 +32,7 @@ export function Input({ label, error, className, id: externalId, ...props }: Inp
           'bg-[var(--bg-card)] text-[var(--text-primary)] text-sm',
           'px-3 py-2 outline-none transition-colors duration-150',
           'placeholder:text-[var(--text-hint)]',
-          'focus:border-[var(--accent)]',
+          'focus:border-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-1',
           'disabled:cursor-not-allowed disabled:opacity-50',
           error && 'border-[var(--error)] focus:border-[var(--error)]',
           className

@@ -1,4 +1,4 @@
-import { type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { type ButtonHTMLAttributes, forwardRef, type ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -27,18 +27,15 @@ type ButtonProps = {
   className?: string
 } & ButtonHTMLAttributes<HTMLButtonElement>
 
-export function Button({
-  variant = 'primary',
-  size = 'md',
-  loading = false,
-  disabled,
-  children,
-  className,
-  ...props
-}: ButtonProps) {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { variant = 'primary', size = 'md', loading = false, disabled, children, className, ...props },
+  ref
+) {
   return (
     <button
+      ref={ref}
       disabled={disabled || loading}
+      aria-busy={loading || undefined}
       className={cn(
         'inline-flex items-center justify-center gap-2 rounded-[var(--radius-sm)] border',
         'transition-colors duration-150 outline-none',
@@ -53,7 +50,7 @@ export function Button({
       {loading ? <Spinner size={size} /> : children}
     </button>
   )
-}
+})
 
 function Spinner({ size }: { size: Size }) {
   const dim = size === 'sm' ? 'size-3' : size === 'lg' ? 'size-5' : 'size-4'

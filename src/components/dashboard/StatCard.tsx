@@ -45,7 +45,7 @@ export function StatCard({ label, value, color = 'primary', hint, className }: S
       <p className={cn('text-[11px] font-semibold uppercase tracking-[0.08em]', c.label)}>
         {label}
       </p>
-      <p className={cn('text-[28px] font-bold leading-none', c.value)}>{value}</p>
+      <p className={cn('text-[28px] font-bold leading-none tabular-nums', c.value)}>{value}</p>
       {hint && <p className="text-[11px] text-[var(--text-hint)]">{hint}</p>}
     </div>
   )
