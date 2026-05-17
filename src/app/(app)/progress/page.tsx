@@ -1,64 +1,16 @@
 import { BookOpen, Flame } from 'lucide-react'
 import Link from 'next/link'
-import { cookies } from 'next/headers'
-
+import { auth } from '@/lib/auth'
+import { getProgressData } from '@/lib/progress'
 import { StatCard } from '@/components/dashboard/StatCard'
 import AccuracyRing from '@/components/progress/AccuracyRing'
-import StatsChart from '@/components/progress/StatsChart'
+import StatsChartWrapper from '@/components/progress/StatsChartWrapper'
 import StreakCalendar from '@/components/progress/StreakCalendar'
 import VocabList from '@/components/progress/VocabList'
 
-type WeeklyActivity = {
-  date: string
-  exercisesCount: number
-  score: number
-}
-
-type VocabItem = {
-  id: string
-  term: string
-  translation: string
-  repetitions: number
-  dueAt: string
-  lastScore: number | null
-}
-
-type ProgressData = {
-  totalWords: number
-  newWords: number
-  learningWords: number
-  masteredWords: number
-  dueToday: number
-  streak: number
-  accuracy: number
-  totalSessions: number
-  weeklyActivity: WeeklyActivity[]
-  recentVocab: VocabItem[]
-}
-
-async function getProgressData(): Promise<ProgressData | null> {
-  try {
-    const cookieStore = await cookies()
-    const cookieHeader = cookieStore
-      .getAll()
-      .map((c) => `${c.name}=${c.value}`)
-      .join('; ')
-
-    const baseUrl = process.env.NEXTAUTH_URL ?? 'http://localhost:3000'
-    const res = await fetch(`${baseUrl}/api/progress`, {
-      headers: { cookie: cookieHeader },
-      cache: 'no-store',
-    })
-
-    if (!res.ok) return null
-    return res.json()
-  } catch {
-    return null
-  }
-}
-
 export default async function ProgressPage() {
-  const data = await getProgressData()
+  const session = await auth()
+  const data = session?.user?.id ? await getProgressData(session.user.id) : null
 
   if (!data) {
     return (
@@ -89,7 +41,6 @@ export default async function ProgressPage() {
     recentVocab,
   } = data
 
-  // Empty state for new users
   if (totalWords === 0) {
     return (
       <div className="flex flex-col gap-6">
@@ -121,12 +72,10 @@ export default async function ProgressPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Header */}
       <h1 className="text-[26px] font-bold tracking-[-0.03em] text-[var(--text-primary)]">
         Мой прогресс
       </h1>
 
-      {/* Row 1: main stats */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Слов изучено" value={totalWords} color="accent" />
         <StatCard label="Выучено" value={masteredWords} color="success" />
@@ -134,19 +83,16 @@ export default async function ProgressPage() {
         <StatCard
           label="Повторить сегодня"
           value={dueToday}
-          color={dueToday > 0 ? 'primary' : 'primary'}
+          color="primary"
           hint={dueToday > 0 ? 'Есть задания' : 'Всё готово'}
         />
       </div>
 
-      {/* Row 2: ring + secondary stats */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        {/* AccuracyRing spans 1 cell, centered */}
         <div className="flex items-center justify-center rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
           <AccuracyRing value={accuracy} />
         </div>
 
-        {/* Streak card with flame icon */}
         <div className="flex flex-col gap-1 rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
           <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--text-hint)]">
             Серия дней
@@ -166,15 +112,13 @@ export default async function ProgressPage() {
         <StatCard label="Новых слов" value={newWords} color="primary" />
       </div>
 
-      {/* Weekly activity */}
       <section className="rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
         <h2 className="mb-4 text-[18px] font-semibold text-[var(--text-primary)]">
           Активность за неделю
         </h2>
-        <StatsChart data={weeklyActivity} />
+        <StatsChartWrapper data={weeklyActivity} />
       </section>
 
-      {/* Streak calendar */}
       <section className="rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
         <h2 className="mb-4 text-[18px] font-semibold text-[var(--text-primary)]">
           История занятий
@@ -182,7 +126,6 @@ export default async function ProgressPage() {
         <StreakCalendar weeklyActivity={weeklyActivity} />
       </section>
 
-      {/* Vocab list */}
       <section className="rounded-md border border-[var(--border)] bg-[var(--bg-card)] p-4">
         <div className="mb-4 flex items-center gap-2">
           <h2 className="text-[18px] font-semibold text-[var(--text-primary)]">Мой словарь</h2>
