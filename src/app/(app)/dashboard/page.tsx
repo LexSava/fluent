@@ -46,7 +46,7 @@ async function getProgress(userId: string) {
 
   // Streak — consecutive days with at least one completed session
   const daySet = new Set(
-    sessionDays.map((s) => {
+    sessionDays.map((s: { startedAt: Date }) => {
       const d = new Date(s.startedAt)
       d.setHours(0, 0, 0, 0)
       return d.getTime()

@@ -43,6 +43,8 @@ export async function POST(req: Request) {
     item = { ...created, lastScore: null }
   }
 
+  if (!item) return NextResponse.json({ error: 'Item not found' }, { status: 404 })
+
   const srsResult = calculateNextReview(item, body.grade)
 
   const updated = await prisma.vocabItem.update({
