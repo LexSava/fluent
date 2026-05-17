@@ -12,7 +12,7 @@ export function ProgressBar({ current, total }: ProgressBarProps) {
 
   return (
     <div className="flex flex-col gap-1.5">
-      <p className="text-[11px] text-[var(--text-hint)]">
+      <p className="text-[11px] text-text-hint">
         Упражнение {current} из {total}
       </p>
       <div
@@ -21,10 +21,10 @@ export function ProgressBar({ current, total }: ProgressBarProps) {
         aria-valuemin={0}
         aria-valuemax={total}
         aria-label={`Упражнение ${current} из ${total}`}
-        className="relative h-1 w-full overflow-hidden rounded-full bg-[var(--bg-elevated)]"
+        className="relative h-1 w-full overflow-hidden rounded-full bg-bg-elevated"
       >
         <motion.div
-          className="absolute inset-y-0 left-0 rounded-full bg-[var(--accent)]"
+          className="absolute inset-y-0 left-0 rounded-full bg-accent"
           animate={{ width: `${pct}%` }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
         />

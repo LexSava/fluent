@@ -80,9 +80,9 @@ export function LoginForm() {
       </Button>
 
       <div className="flex items-center gap-3">
-        <div className="h-px flex-1 bg-[var(--border)]" />
-        <span className="text-xs text-[var(--text-hint)]">или</span>
-        <div className="h-px flex-1 bg-[var(--border)]" />
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-xs text-text-hint">или</span>
+        <div className="h-px flex-1 bg-border" />
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -111,7 +111,7 @@ export function LoginForm() {
               type="button"
               onClick={() => setShowPassword((v) => !v)}
               aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
-              className="absolute right-3 top-[30px] text-[var(--text-hint)] hover:text-[var(--text-secondary)]"
+              className="absolute right-3 top-7.5 text-text-hint hover:text-text-secondary"
             >
               {showPassword ? (
                 <EyeOff size={16} aria-hidden="true" />
@@ -121,7 +121,7 @@ export function LoginForm() {
             </button>
           </div>
           <div className="flex justify-end">
-            <Link href="/forgot-password" className="text-xs text-[var(--accent)] hover:underline">
+            <Link href="/forgot-password" className="text-xs text-accent hover:underline">
               Забыли пароль?
             </Link>
           </div>
@@ -147,9 +147,9 @@ export function LoginForm() {
         </Button>
       </form>
 
-      <p className="text-center text-xs text-[var(--text-hint)]">
+      <p className="text-center text-xs text-text-hint">
         Нет аккаунта?{' '}
-        <Link href="/register" className="text-[var(--accent)] hover:underline">
+        <Link href="/register" className="text-accent hover:underline">
           Зарегистрироваться
         </Link>
       </p>

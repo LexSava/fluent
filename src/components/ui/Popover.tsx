@@ -40,7 +40,7 @@ export function Popover({ isOpen, onClose, children, className }: PopoverProps) 
           exit={{ opacity: 0, x: -8 }}
           transition={{ duration: 0.15 }}
           className={cn(
-            'absolute left-full top-0 z-50 ml-2 w-64 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--bg-card)] p-4',
+            'absolute left-full top-0 z-50 ml-2 w-64 rounded-lg border border-border bg-bg-card p-4',
             className
           )}
         >

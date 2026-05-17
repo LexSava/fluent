@@ -50,7 +50,7 @@ export function ResetPasswordForm({ token }: Props) {
 
   return (
     <div className="flex flex-col gap-5">
-      <p className="text-sm text-[var(--text-secondary)]">Придумайте новый пароль для аккаунта.</p>
+      <p className="text-sm text-text-secondary">Придумайте новый пароль для аккаунта.</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
@@ -69,7 +69,7 @@ export function ResetPasswordForm({ token }: Props) {
               type="button"
               onClick={() => setShowPassword((v) => !v)}
               aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
-              className="absolute right-3 top-[30px] text-[var(--text-hint)] hover:text-[var(--text-secondary)]"
+              className="absolute right-3 top-7.5 text-text-hint hover:text-text-secondary"
             >
               {showPassword ? (
                 <EyeOff size={16} aria-hidden="true" />
@@ -98,7 +98,7 @@ export function ResetPasswordForm({ token }: Props) {
             aria-label={
               showConfirm ? 'Скрыть подтверждение пароля' : 'Показать подтверждение пароля'
             }
-            className="absolute right-3 top-[30px] text-[var(--text-hint)] hover:text-[var(--text-secondary)]"
+            className="absolute right-3 top-7.5 text-text-hint hover:text-text-secondary"
           >
             {showConfirm ? (
               <EyeOff size={16} aria-hidden="true" />
@@ -109,7 +109,7 @@ export function ResetPasswordForm({ token }: Props) {
         </div>
 
         {serverError && (
-          <p className="rounded-[var(--radius-sm)] border border-[var(--error)] bg-[color-mix(in_srgb,var(--error)_10%,transparent)] px-3 py-2 text-xs text-[var(--error)]">
+          <p className="rounded-sm border border-error bg-[color-mix(in_srgb,var(--error)_10%,transparent)] px-3 py-2 text-xs text-error">
             {serverError}
           </p>
         )}

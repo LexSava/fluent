@@ -64,23 +64,23 @@ export function ConfirmModal({
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-[90%] max-w-[400px] rounded-lg border border-[var(--border)] bg-[var(--bg-card)] p-7"
+            className="relative w-[90%] max-w-[400px] rounded-lg border border-border bg-bg-card p-7"
           >
             <div className="flex flex-col items-center">
               {variant === 'danger' ? (
-                <AlertTriangle size={32} className="text-[var(--error)]" aria-hidden="true" />
+                <AlertTriangle size={32} className="text-error" aria-hidden="true" />
               ) : (
-                <LogOut size={32} className="text-[var(--warning)]" aria-hidden="true" />
+                <LogOut size={32} className="text-warning" aria-hidden="true" />
               )}
 
               <p
                 id={titleId}
-                className="mt-3 text-center text-[18px] font-semibold text-[var(--text-primary)]"
+                className="mt-3 text-center text-[18px] font-semibold text-text-primary"
               >
                 {title}
               </p>
 
-              <p id={descId} className="mt-2 text-center text-sm text-[var(--text-secondary)]">
+              <p id={descId} className="mt-2 text-center text-sm text-text-secondary">
                 {description}
               </p>
 
@@ -99,12 +99,10 @@ export function ConfirmModal({
                   ref={confirmRef}
                   onClick={onConfirm}
                   className={cn(
-                    'flex-1 rounded-[var(--radius-sm)] border-none py-2 text-sm font-semibold',
+                    'flex-1 rounded-sm border-none py-2 text-sm font-semibold',
                     'cursor-pointer transition-opacity duration-150 hover:opacity-85',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-1',
-                    variant === 'danger'
-                      ? 'bg-[var(--error)] text-white'
-                      : 'bg-[var(--warning)] text-[#1a1a1a]'
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1',
+                    variant === 'danger' ? 'bg-error text-white' : 'bg-warning text-[#1a1a1a]'
                   )}
                 >
                   {confirmText}

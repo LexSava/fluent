@@ -61,8 +61,8 @@ export function InputBar({
     <div className="w-full max-w-2xl mx-auto">
       <div
         className={cn(
-          'rounded-[var(--radius-lg)] border bg-[var(--bg-card)] transition-colors duration-150',
-          focused ? 'border-[var(--accent)]' : 'border-[var(--border)]',
+          'rounded-lg border bg-bg-card transition-colors duration-150',
+          focused ? 'border-accent' : 'border-border',
           disabled && 'opacity-60'
         )}
       >
@@ -79,9 +79,9 @@ export function InputBar({
           rows={1}
           className={cn(
             'block w-full resize-none overflow-y-auto bg-transparent',
-            'min-h-[44px] max-h-[200px]',
+            'min-h-11 max-h-[200px]',
             'px-4 pt-3 pb-2 text-sm leading-relaxed',
-            'text-[var(--text-primary)] placeholder:text-[var(--text-hint)]',
+            'text-text-primary placeholder:text-text-hint',
             'border-none outline-none focus:outline-none',
             'disabled:cursor-not-allowed'
           )}
@@ -95,12 +95,10 @@ export function InputBar({
             disabled={!canSend}
             aria-label="Отправить сообщение"
             className={cn(
-              'flex size-8 shrink-0 items-center justify-center rounded-[var(--radius-sm)]',
+              'flex size-8 shrink-0 items-center justify-center rounded-sm',
               'transition-colors duration-150',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-1',
-              canSend
-                ? 'bg-[var(--accent)] text-white'
-                : 'bg-[var(--bg-elevated)] text-[var(--text-hint)]',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1',
+              canSend ? 'bg-accent text-white' : 'bg-bg-elevated text-text-hint',
               'disabled:cursor-not-allowed'
             )}
           >

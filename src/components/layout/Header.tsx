@@ -30,8 +30,8 @@ export function Header({ user, onMenuOpen, className }: HeaderProps) {
   return (
     <header
       className={cn(
-        'flex h-14 shrink-0 items-center justify-between border-b border-[var(--border)]',
-        'bg-[var(--bg-card)] px-4',
+        'flex h-14 shrink-0 items-center justify-between border-b border-border',
+        'bg-bg-card px-4',
         className
       )}
     >
@@ -40,11 +40,11 @@ export function Header({ user, onMenuOpen, className }: HeaderProps) {
         <button
           onClick={onMenuOpen}
           aria-label="Open menu"
-          className="flex size-8 items-center justify-center rounded-[var(--radius-sm)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] md:hidden"
+          className="flex size-8 items-center justify-center rounded-sm text-text-secondary hover:bg-bg-elevated md:hidden"
         >
           <Menu size={18} />
         </button>
-        <h1 className="text-sm font-semibold text-[var(--text-primary)]">{title}</h1>
+        <h1 className="text-sm font-semibold text-text-primary">{title}</h1>
       </div>
 
       {/* Right */}

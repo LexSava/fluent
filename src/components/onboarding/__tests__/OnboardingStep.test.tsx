@@ -35,9 +35,7 @@ describe('OnboardingStep', () => {
   it('marks completed segments with accent color', () => {
     const { container } = render(<OnboardingStep {...defaultProps} step={2} total={4} />)
     const segments = container.querySelectorAll('.h-1.flex-1.rounded-full')
-    const accentSegments = Array.from(segments).filter((s) =>
-      s.className.includes('bg-[var(--accent)]')
-    )
+    const accentSegments = Array.from(segments).filter((s) => s.className.includes('bg-accent'))
     expect(accentSegments).toHaveLength(2)
   })
 })

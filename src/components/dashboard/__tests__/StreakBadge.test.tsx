@@ -24,11 +24,11 @@ describe('StreakBadge', () => {
 
   it('shows inactive style when streak is 0', () => {
     const { container } = render(<StreakBadge streak={0} />)
-    expect(container.firstChild).toHaveClass('border-[var(--border)]')
+    expect(container.firstChild).toHaveClass('border-border')
   })
 
   it('shows active style when streak > 0', () => {
     const { container } = render(<StreakBadge streak={3} />)
-    expect(container.firstChild).toHaveClass('border-[var(--warning)]')
+    expect(container.firstChild).toHaveClass('border-warning')
   })
 })

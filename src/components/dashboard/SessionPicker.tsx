@@ -63,7 +63,7 @@ export function SessionPicker() {
   }
 
   return (
-    <div ref={highlightRef} className="rounded-[var(--radius-md)] border border-transparent p-0.5">
+    <div ref={highlightRef} className="rounded-md border border-transparent p-0.5">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {(Object.keys(SESSION_FORMATS) as SessionFormat[]).map((format) => {
           const info = SESSION_FORMATS[format]
@@ -79,24 +79,21 @@ export function SessionPicker() {
               className={cn(
                 'flex flex-col gap-2 rounded-md border p-4 text-left',
                 'transition-colors duration-150 outline-none',
-                'focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-1',
+                'focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1',
                 isLoading
-                  ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)]'
-                  : 'border-[var(--border)] bg-[var(--bg-card)] hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)]',
+                  ? 'border-accent bg-[color-mix(in_srgb,var(--accent)_8%,transparent)]'
+                  : 'border-border bg-bg-card hover:border-accent hover:bg-bg-elevated',
                 isDisabled && 'cursor-not-allowed opacity-50'
               )}
             >
               <div className="flex items-center justify-between">
-                <Icon
-                  size={18}
-                  className={isLoading ? 'text-[var(--accent)]' : 'text-[var(--text-hint)]'}
-                />
+                <Icon size={18} className={isLoading ? 'text-accent' : 'text-text-hint'} />
                 {isLoading && (
-                  <span className="size-3.5 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent" />
+                  <span className="size-3.5 animate-spin rounded-full border-2 border-accent border-t-transparent" />
                 )}
               </div>
-              <p className="text-sm font-medium text-[var(--text-primary)]">{info.label}</p>
-              <p className="text-xs text-[var(--text-hint)]">{info.description}</p>
+              <p className="text-sm font-medium text-text-primary">{info.label}</p>
+              <p className="text-xs text-text-hint">{info.description}</p>
             </button>
           )
         })}

@@ -22,8 +22,8 @@ export function Card({ children, className, onClick }: CardProps) {
           : undefined
       }
       className={cn(
-        'rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-card)] p-4',
-        onClick && 'cursor-pointer transition-colors duration-150 hover:border-[var(--accent)]',
+        'rounded-md border border-border bg-bg-card p-4',
+        onClick && 'cursor-pointer transition-colors duration-150 hover:border-accent',
         className
       )}
     >

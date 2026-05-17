@@ -26,7 +26,7 @@ export function PasswordStrengthIndicator({ password }: Props) {
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="h-1 w-full overflow-hidden rounded-full bg-[var(--border)]">
+      <div className="h-1 w-full overflow-hidden rounded-full bg-border">
         <div
           className="h-full rounded-full transition-all duration-300"
           style={{ width: `${widthPct}%`, backgroundColor: color }}

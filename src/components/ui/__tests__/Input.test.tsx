@@ -15,7 +15,7 @@ describe('Input', () => {
 
   it('applies error border class when error is set', () => {
     render(<Input error="Bad input" />)
-    expect(screen.getByRole('textbox').className).toContain('border-[var(--error)]')
+    expect(screen.getByRole('textbox').className).toContain('border-error')
   })
 
   it('calls onChange when user types', async () => {

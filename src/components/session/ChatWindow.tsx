@@ -289,18 +289,18 @@ export function ChatWindow({
           {/* Empty state while waiting for first message */}
           {isInitialLoading && (
             <div className="flex flex-col items-center justify-center gap-4 py-16">
-              <div className="flex size-12 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-elevated)]">
-                <BookOpen size={22} className="text-[var(--accent)]" />
+              <div className="flex size-12 items-center justify-center rounded-md border border-border bg-bg-elevated">
+                <BookOpen size={22} className="text-accent" />
               </div>
               <div className="flex flex-col items-center gap-1">
-                <p className="text-sm font-medium text-[var(--text-primary)]">
+                <p className="text-sm font-medium text-text-primary">
                   Тьютор готовит первое упражнение...
                 </p>
                 <span className="inline-flex gap-1">
                   {[0, 1, 2].map((i) => (
                     <span
                       key={i}
-                      className="inline-block size-1.5 rounded-full bg-[var(--accent)]"
+                      className="inline-block size-1.5 rounded-full bg-accent"
                       style={{
                         animation: 'pulse 1.2s ease-in-out infinite',
                         animationDelay: `${i * 0.2}s`,
@@ -315,8 +315,8 @@ export function ChatWindow({
           {/* No messages yet but not loading */}
           {!isLoading && displayMessages.length === 0 && (
             <div className="flex flex-col items-center justify-center gap-3 py-16">
-              <MessageCircle size={32} className="text-[var(--text-hint)]" />
-              <p className="text-sm text-[var(--text-secondary)]">Начни сессию</p>
+              <MessageCircle size={32} className="text-text-hint" />
+              <p className="text-sm text-text-secondary">Начни сессию</p>
             </div>
           )}
 
@@ -344,13 +344,13 @@ export function ChatWindow({
           {/* Typing indicator while streaming (after first message appeared) */}
           {isLoading && displayMessages.length > 0 && !streamingId && (
             <div className="mt-4 flex justify-start">
-              <div className="rounded-[2px_8px_8px_8px] border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3">
+              <div className="rounded-[2px_8px_8px_8px] border border-border bg-bg-card px-4 py-3">
                 <span className="inline-flex gap-1">
                   {[0, 1, 2].map((i) => (
                     <span
                       key={i}
                       className={cn(
-                        'inline-block size-1.5 rounded-full bg-[var(--text-hint)]',
+                        'inline-block size-1.5 rounded-full bg-text-hint',
                         'animate-bounce'
                       )}
                       style={{ animationDelay: `${i * 0.15}s` }}
@@ -379,7 +379,7 @@ export function ChatWindow({
       {/* Error banner */}
       {error && (
         <div className="mx-4 mb-2">
-          <div className="mx-auto max-w-2xl rounded-sm border border-[var(--error)] bg-[color-mix(in_srgb,var(--error)_10%,transparent)] px-3 py-2 text-xs text-[var(--error)]">
+          <div className="mx-auto max-w-2xl rounded-sm border border-error bg-[color-mix(in_srgb,var(--error)_10%,transparent)] px-3 py-2 text-xs text-error">
             {error}
           </div>
         </div>

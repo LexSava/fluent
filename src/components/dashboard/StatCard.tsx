@@ -4,28 +4,28 @@ type Color = 'accent' | 'success' | 'warning' | 'primary'
 
 const colorMap: Record<Color, { value: string; label: string; border: string; bg: string }> = {
   accent: {
-    value: 'text-[var(--accent)]',
-    label: 'text-[var(--text-hint)]',
-    border: 'border-[var(--border)]',
-    bg: 'bg-[var(--bg-card)]',
+    value: 'text-accent',
+    label: 'text-text-hint',
+    border: 'border-border',
+    bg: 'bg-bg-card',
   },
   success: {
-    value: 'text-[var(--success)]',
-    label: 'text-[var(--text-hint)]',
-    border: 'border-[var(--border)]',
-    bg: 'bg-[var(--bg-card)]',
+    value: 'text-success',
+    label: 'text-text-hint',
+    border: 'border-border',
+    bg: 'bg-bg-card',
   },
   warning: {
-    value: 'text-[var(--warning)]',
-    label: 'text-[var(--text-hint)]',
-    border: 'border-[var(--border)]',
-    bg: 'bg-[var(--bg-card)]',
+    value: 'text-warning',
+    label: 'text-text-hint',
+    border: 'border-border',
+    bg: 'bg-bg-card',
   },
   primary: {
-    value: 'text-[var(--text-primary)]',
-    label: 'text-[var(--text-hint)]',
-    border: 'border-[var(--border)]',
-    bg: 'bg-[var(--bg-card)]',
+    value: 'text-text-primary',
+    label: 'text-text-hint',
+    border: 'border-border',
+    bg: 'bg-bg-card',
   },
 }
 
@@ -46,7 +46,7 @@ export function StatCard({ label, value, color = 'primary', hint, className }: S
         {label}
       </p>
       <p className={cn('text-[28px] font-bold leading-none tabular-nums', c.value)}>{value}</p>
-      {hint && <p className="text-[11px] text-[var(--text-hint)]">{hint}</p>}
+      {hint && <p className="text-[11px] text-text-hint">{hint}</p>}
     </div>
   )
 }

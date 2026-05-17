@@ -11,13 +11,13 @@ describe('Button', () => {
   it('applies primary variant styles by default', () => {
     render(<Button>Primary</Button>)
     const btn = screen.getByRole('button')
-    expect(btn.className).toContain('bg-[var(--accent)]')
+    expect(btn.className).toContain('bg-accent')
   })
 
   it('applies secondary variant styles', () => {
     render(<Button variant="secondary">Secondary</Button>)
     const btn = screen.getByRole('button')
-    expect(btn.className).toContain('bg-[var(--bg-elevated)]')
+    expect(btn.className).toContain('bg-bg-elevated')
   })
 
   it('applies ghost variant styles', () => {

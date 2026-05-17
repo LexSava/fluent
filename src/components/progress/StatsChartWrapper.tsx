@@ -8,7 +8,7 @@ const StatsChart = dynamic(() => import('./StatsChart'), {
   ssr: false,
   loading: () => (
     <div className="flex h-[200px] flex-col items-center justify-center gap-2">
-      <BarChart2 size={28} className="text-[var(--text-hint)]" />
+      <BarChart2 size={28} className="text-text-hint" />
     </div>
   ),
 })
