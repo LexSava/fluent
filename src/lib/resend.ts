@@ -1,12 +1,11 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY!)
-
 export async function sendPasswordResetEmail(
   email: string,
   resetUrl: string,
   userName: string
 ): Promise<void> {
+  const resend = new Resend(process.env.RESEND_API_KEY!)
   await resend.emails.send({
     from: 'Fluent <onboarding@resend.dev>',
     to: email,
