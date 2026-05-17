@@ -37,7 +37,7 @@ async function getProgress(userId: string) {
       }),
     ])
 
-  const mastered = allItems.filter((i) => i.repetitions >= 5).length
+  const mastered = allItems.filter((i: { repetitions: number }) => i.repetitions >= 5).length
 
   const totalEx = recentForAccuracy.reduce((s, r) => s + r.exercisesTotal, 0)
   const totalOk = recentForAccuracy.reduce((s, r) => s + r.exercisesCorrect, 0)
