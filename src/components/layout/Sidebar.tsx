@@ -1,13 +1,14 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
-import { BarChart2, LayoutDashboard, LogOut, MessageCircle, Settings, X } from 'lucide-react'
+import { BarChart2, LayoutDashboard, Lock, LogOut, MessageCircle, Settings, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Avatar } from '@/components/ui/Avatar'
+import { Popover } from '@/components/ui/Popover'
 import { cn } from '@/lib/utils'
 import type { UserProfile } from '@/types/user'
 
@@ -34,24 +35,19 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [activeSessionUrl, setActiveSessionUrl] = useState<string | null>(null)
+  const [showPopover, setShowPopover] = useState(false)
+  const [hasStartedSession, setHasStartedSession] = useState<boolean | null>(null)
 
   useEffect(() => {
     requestAnimationFrame(() => {
       try {
         setActiveSessionUrl(sessionStorage.getItem('active_session_url'))
+        setHasStartedSession(!!localStorage.getItem('hasStartedSession'))
       } catch {}
     })
   }, [pathname])
 
-  function handleSessionClick(e: React.MouseEvent) {
-    e.preventDefault()
-    onClose()
-    if (activeSessionUrl) {
-      router.push(activeSessionUrl)
-    } else {
-      router.push('/dashboard')
-    }
-  }
+  const closePopover = useCallback(() => setShowPopover(false), [])
 
   const content = (
     <div className="flex h-full w-56 flex-col border-r border-[var(--border)] bg-[var(--bg-card)]">
@@ -60,7 +56,6 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
         <span className="text-base font-semibold tracking-tight text-[var(--text-primary)]">
           Fluent
         </span>
-        {/* Mobile close */}
         <button
           onClick={onClose}
           className="flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-[var(--text-hint)] hover:text-[var(--text-primary)] md:hidden"
@@ -82,14 +77,70 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
           )
 
           if (isSession) {
+            const hasSession = !!activeSessionUrl
+            const showBadge = !hasSession && hasStartedSession === false
+
             return (
-              <a key={href} href={href} onClick={handleSessionClick} className={itemClass}>
-                <Icon size={16} className="shrink-0" />
-                {label}
-                {activeSessionUrl && (
-                  <span className="ml-auto size-2 shrink-0 rounded-full bg-[var(--success)]" />
+              <div key={href} className="relative">
+                {hasSession ? (
+                  <a
+                    href={activeSessionUrl}
+                    title="Вернуться к активной сессии"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      onClose()
+                      router.push(activeSessionUrl)
+                    }}
+                    className={itemClass}
+                  >
+                    <Icon size={16} className="shrink-0" />
+                    <span className="flex-1">{label}</span>
+                    <span className="size-2 shrink-0 rounded-full bg-[var(--success)]" />
+                  </a>
+                ) : (
+                  <button
+                    onClick={() => setShowPopover((p) => !p)}
+                    className={cn(
+                      'flex w-full items-center gap-3 rounded-[var(--radius-sm)] px-3 py-2 text-sm transition-colors duration-150',
+                      active
+                        ? 'bg-[var(--accent-dim)] font-medium text-[var(--accent)]'
+                        : 'cursor-default text-[var(--text-secondary)]'
+                    )}
+                  >
+                    <Icon size={16} className={cn('shrink-0', !active && 'opacity-50')} />
+                    <span className={cn('flex-1 text-left', !active && 'opacity-50')}>{label}</span>
+                    {showBadge ? (
+                      <span className="rounded-[3px] bg-[var(--accent)] px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-[0.08em] text-white">
+                        Начни здесь
+                      </span>
+                    ) : (
+                      <Lock
+                        size={12}
+                        className={cn('shrink-0 text-[var(--text-hint)]', !active && 'opacity-50')}
+                      />
+                    )}
+                  </button>
                 )}
-              </a>
+
+                <Popover isOpen={showPopover} onClose={closePopover}>
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">
+                    Нет активной сессии
+                  </p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-[var(--text-secondary)]">
+                    Выбери формат занятия на главной странице чтобы начать
+                  </p>
+                  <button
+                    onClick={() => {
+                      closePopover()
+                      onClose()
+                      router.push('/dashboard')
+                    }}
+                    className="mt-3 w-full rounded-[var(--radius-sm)] bg-[var(--accent)] px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                  >
+                    Перейти на главную
+                  </button>
+                </Popover>
+              </div>
             )
           }
 

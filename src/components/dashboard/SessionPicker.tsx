@@ -2,7 +2,7 @@
 
 import { BookOpen, Edit3, FileText, MessageCircle, Pencil, RotateCcw } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -20,6 +20,24 @@ const ICONS: Record<string, LucideIcon> = {
 export function SessionPicker() {
   const router = useRouter()
   const [loading, setLoading] = useState<SessionFormat | null>(null)
+  const highlightRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('startSession') !== 'true') return
+    document.getElementById('session-picker')?.scrollIntoView({ behavior: 'smooth' })
+    window.history.replaceState({}, '', '/dashboard')
+    const el = highlightRef.current
+    if (!el) return
+    el.style.transition = 'border-color 0.3s, background-color 0.3s'
+    el.style.borderColor = 'var(--accent)'
+    el.style.backgroundColor = 'color-mix(in srgb, var(--accent) 4%, transparent)'
+    const timer = setTimeout(() => {
+      el.style.borderColor = 'transparent'
+      el.style.backgroundColor = 'transparent'
+    }, 2000)
+    return () => clearTimeout(timer)
+  }, [])
 
   async function handlePick(format: SessionFormat) {
     if (loading) return
@@ -35,7 +53,9 @@ export function SessionPicker() {
       if (!res.ok) throw new Error('Failed to start session')
 
       const data = await res.json()
-      // Pass sessionId via query so /session page can pick it up
+      try {
+        localStorage.setItem('hasStartedSession', 'true')
+      } catch {}
       router.push(`/session?sessionId=${data.session.id}&format=${format}`)
     } catch {
       setLoading(null)
@@ -43,42 +63,44 @@ export function SessionPicker() {
   }
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {(Object.keys(SESSION_FORMATS) as SessionFormat[]).map((format) => {
-        const info = SESSION_FORMATS[format]
-        const Icon = ICONS[info.icon] ?? MessageCircle
-        const isLoading = loading === format
-        const isDisabled = loading !== null && !isLoading
+    <div ref={highlightRef} className="rounded-[var(--radius-md)] border border-transparent p-0.5">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {(Object.keys(SESSION_FORMATS) as SessionFormat[]).map((format) => {
+          const info = SESSION_FORMATS[format]
+          const Icon = ICONS[info.icon] ?? MessageCircle
+          const isLoading = loading === format
+          const isDisabled = loading !== null && !isLoading
 
-        return (
-          <button
-            key={format}
-            onClick={() => handlePick(format)}
-            disabled={isDisabled}
-            className={cn(
-              'flex flex-col gap-2 rounded-md border p-4 text-left',
-              'transition-colors duration-150 outline-none',
-              'focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-1',
-              isLoading
-                ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)]'
-                : 'border-[var(--border)] bg-[var(--bg-card)] hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)]',
-              isDisabled && 'cursor-not-allowed opacity-50'
-            )}
-          >
-            <div className="flex items-center justify-between">
-              <Icon
-                size={18}
-                className={isLoading ? 'text-[var(--accent)]' : 'text-[var(--text-hint)]'}
-              />
-              {isLoading && (
-                <span className="size-3.5 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent" />
+          return (
+            <button
+              key={format}
+              onClick={() => handlePick(format)}
+              disabled={isDisabled}
+              className={cn(
+                'flex flex-col gap-2 rounded-md border p-4 text-left',
+                'transition-colors duration-150 outline-none',
+                'focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-1',
+                isLoading
+                  ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)]'
+                  : 'border-[var(--border)] bg-[var(--bg-card)] hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)]',
+                isDisabled && 'cursor-not-allowed opacity-50'
               )}
-            </div>
-            <p className="text-sm font-medium text-[var(--text-primary)]">{info.label}</p>
-            <p className="text-xs text-[var(--text-hint)]">{info.description}</p>
-          </button>
-        )
-      })}
+            >
+              <div className="flex items-center justify-between">
+                <Icon
+                  size={18}
+                  className={isLoading ? 'text-[var(--accent)]' : 'text-[var(--text-hint)]'}
+                />
+                {isLoading && (
+                  <span className="size-3.5 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent" />
+                )}
+              </div>
+              <p className="text-sm font-medium text-[var(--text-primary)]">{info.label}</p>
+              <p className="text-xs text-[var(--text-hint)]">{info.description}</p>
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }

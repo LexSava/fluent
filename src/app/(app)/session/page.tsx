@@ -1,9 +1,18 @@
 'use client'
 
-import { ArrowLeft, MessageCircle } from 'lucide-react'
-import Link from 'next/link'
+import {
+  ArrowLeft,
+  BookOpen,
+  Edit3,
+  FileText,
+  MessageCircle,
+  MessageSquare,
+  Pencil,
+  RotateCcw,
+} from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useRef, useState } from 'react'
+import type { LucideIcon } from 'lucide-react'
 
 import { ChatWindow, clearSessionStorage } from '@/components/session/ChatWindow'
 import { ProgressBar } from '@/components/session/ProgressBar'
@@ -11,6 +20,15 @@ import { Button } from '@/components/ui/Button'
 import { ConfirmModal } from '@/components/ui/ConfirmModal'
 import { SESSION_FORMATS, SessionFormat } from '@/types/session'
 import type { Exercise } from '@/types/session'
+
+const FORMAT_ICONS: Record<string, LucideIcon> = {
+  RotateCcw,
+  BookOpen,
+  Pencil,
+  FileText,
+  Edit3,
+  MessageCircle,
+}
 
 const TOTAL_EXERCISES = 10
 
@@ -111,20 +129,44 @@ function SessionContent() {
     router.push('/dashboard')
   }
 
-  // ── No sessionId: placeholder ─────────────────────────────────────────────
+  // ── No sessionId: informative empty state ─────────────────────────────────
   if (!sessionId) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 py-24">
-        <MessageCircle size={40} className="text-[var(--text-hint)]" />
-        <p className="text-sm text-[var(--text-secondary)]">
-          Сначала выбери формат занятия на главной странице
-        </p>
-        <Link
-          href="/dashboard"
-          className="rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-2 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:border-[var(--accent)] hover:text-[var(--text-primary)]"
+      <div className="flex h-full flex-col items-center justify-center gap-6 py-12">
+        <MessageSquare size={64} className="text-[var(--accent)]" style={{ opacity: 0.6 }} />
+
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1 className="text-[22px] font-semibold text-[var(--text-primary)]">
+            Выбери формат занятия
+          </h1>
+          <p className="max-w-[360px] text-[15px] leading-relaxed text-[var(--text-secondary)]">
+            Чтобы начать сессию, перейди на главную страницу и выбери формат
+          </p>
+        </div>
+
+        <div className="grid w-full max-w-lg grid-cols-2 gap-2 sm:grid-cols-3">
+          {(Object.keys(SESSION_FORMATS) as SessionFormat[]).map((format) => {
+            const info = SESSION_FORMATS[format]
+            const Icon = FORMAT_ICONS[info.icon] ?? MessageCircle
+            return (
+              <button
+                key={format}
+                onClick={() => router.push('/dashboard?startSession=true')}
+                className="flex flex-col items-center gap-2 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-card)] px-3 py-4 text-center transition-colors duration-150 hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)]"
+              >
+                <Icon size={20} className="text-[var(--text-hint)]" />
+                <span className="text-xs font-medium text-[var(--text-primary)]">{info.label}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        <button
+          onClick={() => router.push('/dashboard')}
+          className="rounded-[var(--radius-sm)] bg-[var(--accent)] px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
         >
-          На главную
-        </Link>
+          Перейти на главную
+        </button>
       </div>
     )
   }

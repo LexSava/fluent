@@ -122,7 +122,7 @@ export default async function DashboardPage() {
       </section>
 
       {/* Session picker */}
-      <section>
+      <section id="session-picker">
         <h2 className="mb-3 text-[18px] font-semibold text-[var(--text-primary)]">
           Начать занятие
         </h2>
